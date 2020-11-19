@@ -21,10 +21,10 @@ public class BoardStage extends Stage {
     }
 
     public void init() {
-        SwitchLogic input1 = new SwitchActor(20, 200, 10, LogicType.SWITCH);
-        SwitchLogic input2 = new SwitchActor(20, 100, 10, LogicType.SWITCH);
+        SwitchActor input1 = new SwitchActor(20, 200, 10, LogicType.SWITCH);
+        SwitchActor input2 = new SwitchActor(20, 100, 10, LogicType.SWITCH);
 
-        Actor andGate = new AndGate(100, 150);
+        AndGate andGate = new AndGate(100, 150);
         Actor andGate2 = new AndGate(100, 150);
         Actor andGate3 = new AndGate(100, 150);
 
@@ -32,11 +32,12 @@ public class BoardStage extends Stage {
 
 
 
-//        Actor line = new ConnectionActor();
+//        Actor line = new ConnectionActor(input1, andGate.getFirstInput());
 
 
-        addActor((Actor) input1);
-        addActor((Actor) input2);
+//        addActor(line);
+        addActor(input1);
+        addActor(input2);
         addActor(andGate);
         addActor(output);
     }

@@ -1,6 +1,7 @@
 package nl.faanveldhuijsen.logicgates.actors;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
@@ -34,6 +35,12 @@ public class GateActor extends BaseActor implements Draggable {
     @Override
     public void dragStop(InputEvent event, float x, float y, int pointer, DragListener self) {
         getParent().setScale(1.0f);
-    }
 
+        float xPos = getParent().getX() + x + startDrag.x;
+        float yPos = getParent().getY() + y + startDrag.y;
+        xPos = Math.round(xPos / 16) * 16;
+        yPos = Math.round(yPos / 16) * 16;
+
+        getParent().setPosition(xPos, yPos);
+    }
 }

@@ -22,15 +22,15 @@ public class AndGate extends GateGroup {
 
     }
 
-    public SwitchLogic getOutput() {
+    public SwitchActor getOutput() {
         return this.outputs.get(0);
     }
 
-    public SwitchLogic getFirstInput() {
+    public SwitchActor getFirstInput() {
         return this.inputs.get(0);
     }
 
-    public SwitchLogic getSecondInput() {
+    public SwitchActor getSecondInput() {
         return this.inputs.get(1);
     }
 

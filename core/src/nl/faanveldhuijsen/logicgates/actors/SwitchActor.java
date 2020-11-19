@@ -1,25 +1,14 @@
 package nl.faanveldhuijsen.logicgates.actors;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.model.data.ModelTexture;
-import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import nl.faanveldhuijsen.logicgates.figures.CircleFigure;
-import nl.faanveldhuijsen.logicgates.figures.ConnectionFigure;
 import nl.faanveldhuijsen.logicgates.logics.Clickable;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
 import nl.faanveldhuijsen.logicgates.logics.LogicType;
@@ -31,23 +20,26 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
     private static final Color COLOR_OFF = new Color(0.9f, 0.9f, 0.9f, 1.0f);
 
     public final LogicType type;
+    private final int size;
+
     private boolean on = false;
 
+    private ConnectionActor[] connection = new ConnectionActor[2];
     private SwitchActor[] sources = new SwitchActor[2];
-    private Sprite connectionSprite;
 
     public SwitchActor(float x, float y, int size, LogicType type) {
         this(x, y, size, type, null);
     }
 
     public SwitchActor(float x, float y, int size, LogicType type, SwitchActor... sources) {
-        super(x - (size * 2), y - (size * 2));
+        super(x,y);//x - (size * 2), y - (size * 2));
 
         CircleFigure circleFigure = new CircleFigure(size, COLOR_OFF);
         setSprite(circleFigure.getTexture());
 
         this.sources = sources;
         this.type = type;
+        this.size = size;
 
         circleFigure.dispose();
 
@@ -99,15 +91,18 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         ColorAction colorAction = new ColorAction();
         this.on = newOutput;
 
-        Color color = COLOR_OFF;
-        if (this.getOutput()) {
-            color = COLOR_ON;
-        }
-
+        Color color = getOutputColor();
         colorAction.setEndColor(color);
 
         colorAction.setDuration(0.05f);
         this.addAction(colorAction);
+    }
+
+    public Color getOutputColor() {
+        if (this.getOutput()) {
+            return COLOR_ON;
+        }
+        return COLOR_OFF;
     }
 
     @Override
@@ -121,12 +116,13 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     @Override
     public void dragStart(InputEvent event, float x, float y, int pointer) {
-
+//        connection[1] = new ConnectionActor(this, x, y);
+//        getStage().addActor(connection[1]);
     }
 
     @Override
     public void drag(InputEvent event, float x, float y, int pointer) {
-
+//        connection.paint(event.getStageX(), event.getStageY());
     }
 
     @Override
@@ -135,9 +131,13 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
             SwitchActor target = findHoveredActor(getStage().getActors());
             if (target != null && target.type == LogicType.COPY) {
                 target.setSource(this);
-                System.out.println(target);
+//                target.connection = connection;
+//                connection.setEnd(target);
+                return;
             }
         }
+//        connection.remove();
+//        connection = null;
     }
 
     public static SwitchActor findHoveredActor(Array<Actor> actors) {
@@ -154,9 +154,31 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     public void setSource(SwitchActor... sources) {
         this.sources = sources;
+
+        if (sources == null) {
+            connection = null;
+            return;
+        }
+        for (int i = 0; i < sources.length; i++) {
+            SwitchActor source = sources[i];
+
+            if (source == null) {
+                continue;
+            }
+            if (getParent() != source.getParent()) {
+                connection[i] = new ConnectionActor(this, source);
+                getStage().addActor(connection[i]);
+            }
+        }
     }
 
-    public void setSource(int index, SwitchActor source) {
-        this.sources[index] = source;
+    public Vector2 getPosition() {
+        Vector2 center = new Vector2(getX() + (size * 2), getY() + (size * 2));
+        if (hasParent()) {
+            Vector2 vector2 = new Vector2(getParent().getX(), getParent().getY());
+            return vector2.add(center);
+        }
+        return center;
     }
+
 }

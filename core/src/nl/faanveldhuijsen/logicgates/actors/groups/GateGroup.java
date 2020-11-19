@@ -2,6 +2,7 @@ package nl.faanveldhuijsen.logicgates.actors.groups;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import nl.faanveldhuijsen.logicgates.actors.BaseActor;
@@ -56,8 +57,9 @@ public class GateGroup extends BaseGroup {
     }
 
     private SwitchActor addChild(float x, int amount, ArrayList<SwitchActor> actors, LogicType type, SwitchActor... sources) {
+        int size = 5;
         float heightOffset = getHeight() / (amount + 1);
-        SwitchActor switchActor = new SwitchActor(x, heightOffset * (actors.size() + 1), 5, type, sources);
+        SwitchActor switchActor = new SwitchActor(x - (size * 2), (heightOffset * (actors.size() + 1)) - (size * 2), size, type, sources);
 
         addActor(switchActor);
         actors.add(switchActor);

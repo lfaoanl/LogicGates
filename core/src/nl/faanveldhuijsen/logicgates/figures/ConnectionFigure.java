@@ -1,17 +1,27 @@
 package nl.faanveldhuijsen.logicgates.figures;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class ConnectionFigure extends BaseFigure {
 
-    public ConnectionFigure(Stage stage, Vector2 pos1, Vector2 pos2) {
-        super((int)stage.getWidth(), (int) stage.getHeight());
+    private final TextureRegion pixelRegion;
+
+    public ConnectionFigure(Vector2 pos1, Vector2 pos2) {
+        super(1, 1);
 
         setColor(Color.WHITE);
-        drawLine((int) pos1.x, (int) pos1.y, (int) pos2.x, (int) pos2.y);
-        System.out.println(pos1);
-        System.out.println(pos2);
+        drawPixel(0, 0);
+
+        pixelRegion = new TextureRegion(getTexture(), 0, 0, 1, 1);
+    }
+
+    public ShapeDrawer getDrawer(Batch batch) {
+        return new ShapeDrawer(batch, pixelRegion);
     }
 }
