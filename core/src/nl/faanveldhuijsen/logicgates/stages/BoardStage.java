@@ -7,15 +7,15 @@ import nl.faanveldhuijsen.logicgates.actors.InputActor;
 
 public class BoardStage extends Stage {
 
-
     public BoardStage() {
         super(new ScreenViewport());
     }
 
     public void init() {
-        Actor actor = new InputActor(20, 100, 16);
+        Actor input1 = new InputActor(20, 200, 16);
+        Actor input2 = new InputActor(20, 100, 16);
 
-        addActor(actor);
-        setKeyboardFocus(actor);
+        addActor(input1);
+        addActor(input2);
     }
 }

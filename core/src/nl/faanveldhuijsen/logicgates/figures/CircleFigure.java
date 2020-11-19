@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 public class CircleFigure extends BaseFigure {
 
     public CircleFigure(int radius, Color color) {
-        super(radius * 2,radius * 2);
+        super(radius * 4,radius * 4);
 
         setColor(color);
-        fillCircle(radius, radius, radius);
+        fillCircle(radius * 2, radius * 2, radius);
     }
 
     /*
