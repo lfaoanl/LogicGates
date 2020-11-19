@@ -14,16 +14,13 @@ public abstract class BaseGroup extends Group implements Clickable {
     protected ClickListener clickListener;
 
     public BaseGroup() {
-        if (this instanceof Clickable) {
-            enableTouchDown();
-        }
+        enableTouchDown();
         if (this instanceof Draggable) {
             enableDraggable();
         }
     }
 
     public void enableTouchDown() {
-        if (this instanceof Clickable) {
             setTouchable(Touchable.enabled);
             addListener(clickListener = new ClickListener() {
                 @Override
@@ -31,7 +28,6 @@ public abstract class BaseGroup extends Group implements Clickable {
                     return ((Clickable) BaseGroup.this).touchDown(event, x, y, pointer, button);
                 }
             });
-        }
     }
 
     public void enableDraggable() {

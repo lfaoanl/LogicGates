@@ -32,14 +32,12 @@ public class BoardStage extends Stage {
 
 
 
-//        Actor line = new ConnectionActor(200, 300);
+//        Actor line = new ConnectionActor();
 
 
         addActor((Actor) input1);
         addActor((Actor) input2);
         addActor(andGate);
-        addActor(andGate2);
-        addActor(andGate3);
         addActor(output);
     }
 }

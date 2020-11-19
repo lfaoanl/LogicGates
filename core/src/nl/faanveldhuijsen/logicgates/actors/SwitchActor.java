@@ -1,7 +1,15 @@
 package nl.faanveldhuijsen.logicgates.actors;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.model.data.ModelTexture;
+import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import nl.faanveldhuijsen.logicgates.figures.CircleFigure;
+import nl.faanveldhuijsen.logicgates.figures.ConnectionFigure;
 import nl.faanveldhuijsen.logicgates.logics.Clickable;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
 import nl.faanveldhuijsen.logicgates.logics.LogicType;
@@ -24,13 +33,14 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
     public final LogicType type;
     private boolean on = false;
 
-    private SwitchLogic[] sources = new SwitchLogic[2];
+    private SwitchActor[] sources = new SwitchActor[2];
+    private Sprite connectionSprite;
 
     public SwitchActor(float x, float y, int size, LogicType type) {
         this(x, y, size, type, null);
     }
 
-    public SwitchActor(float x, float y, int size, LogicType type, SwitchLogic... sources) {
+    public SwitchActor(float x, float y, int size, LogicType type, SwitchActor... sources) {
         super(x - (size * 2), y - (size * 2));
 
         CircleFigure circleFigure = new CircleFigure(size, COLOR_OFF);
@@ -48,11 +58,6 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
             enableDraggable();
         }
 
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
     }
 
     @Override
