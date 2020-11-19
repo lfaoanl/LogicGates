@@ -14,7 +14,7 @@ import nl.faanveldhuijsen.logicgates.logics.SwitchLogic;
 
 import java.util.ArrayList;
 
-public class GateGroup extends BaseGroup implements Draggable {
+public class GateGroup extends BaseGroup {
 
     protected final Color GATE_COLOR = new Color(0.5f, 1.0f, 0.5f, 1.0f);
 
@@ -81,21 +81,4 @@ public class GateGroup extends BaseGroup implements Draggable {
         return returnable;
     }
 
-    @Override
-    public void dragStart(InputEvent event, float x, float y, int pointer) {
-        setScale(1.1f);
-        startDrag = new Vector2(getX() - event.getStageX(), getY() - event.getStageY());
-    }
-
-    @Override
-    public void drag(InputEvent event, float x, float y, int pointer) {
-        float x1 = getX() + x + startDrag.x;
-        float y1 = getY() + y + startDrag.y;
-        setPosition(x1, y1);
-    }
-
-    @Override
-    public void dragStop(InputEvent event, float x, float y, int pointer, DragListener self) {
-        setScale(1.0f);
-    }
 }

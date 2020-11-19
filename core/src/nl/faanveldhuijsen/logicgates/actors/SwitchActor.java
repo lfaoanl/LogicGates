@@ -41,6 +41,13 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
         circleFigure.dispose();
 
+
+
+        enableTouchDown();
+        if (type != LogicType.COPY) {
+            enableDraggable();
+        }
+
     }
 
     @Override
@@ -128,7 +135,7 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         }
     }
 
-    private SwitchActor findHoveredActor(Array<Actor> actors) {
+    public static SwitchActor findHoveredActor(Array<Actor> actors) {
         for (Actor actor : actors) {
             if (actor instanceof Clickable && ((Clickable) actor).getClickListener().isOver()) {
                 if (actor instanceof Group) {

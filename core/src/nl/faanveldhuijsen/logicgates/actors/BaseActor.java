@@ -20,13 +20,6 @@ public abstract class BaseActor extends Actor {
     public BaseActor(float x, float y) {
         setX(x);
         setY(y);
-
-        if (this instanceof Clickable) {
-            enableTouchDown();
-        }
-        if (this instanceof Draggable) {
-            enableDraggable();
-        }
     }
 
     @Override
@@ -45,7 +38,7 @@ public abstract class BaseActor extends Actor {
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
     }
 
-    private void enableTouchDown() {
+    protected void enableTouchDown() {
         if (this instanceof Clickable) {
             setTouchable(Touchable.enabled);
             addListener(clickListener = new ClickListener() {
@@ -56,7 +49,7 @@ public abstract class BaseActor extends Actor {
         }
     }
 
-    private void enableDraggable() {
+    protected void enableDraggable() {
         if (this instanceof Draggable) {
             setTouchable(Touchable.enabled);
 
@@ -84,10 +77,4 @@ public abstract class BaseActor extends Actor {
         return clickListener;
     }
 
-//    @Override
-//    protected void positionChanged() {
-//        if (sprite != null) {
-//            sprite.setPosition(getX(), getY());
-//        }
-//    }
 }

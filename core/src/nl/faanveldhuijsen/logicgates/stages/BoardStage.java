@@ -25,6 +25,8 @@ public class BoardStage extends Stage {
         SwitchLogic input2 = new SwitchActor(20, 100, 10, LogicType.SWITCH);
 
         Actor andGate = new AndGate(100, 150);
+        Actor andGate2 = new AndGate(100, 150);
+        Actor andGate3 = new AndGate(100, 150);
 
         Actor output = new SwitchActor(300, 150, 10, LogicType.COPY);
 
@@ -36,6 +38,8 @@ public class BoardStage extends Stage {
         addActor((Actor) input1);
         addActor((Actor) input2);
         addActor(andGate);
+        addActor(andGate2);
+        addActor(andGate3);
         addActor(output);
     }
 }
