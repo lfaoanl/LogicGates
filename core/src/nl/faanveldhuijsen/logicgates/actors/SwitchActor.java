@@ -70,8 +70,8 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         switch (type) {
             case AND:
                 return getSourceOutput(0) && getSourceOutput(1);
-            case OR:
-                return getSourceOutput(0) || getSourceOutput(1);
+            case NOT:
+                return !getSourceOutput(0);
             case COPY:
                 return getSourceOutput(0);
         }
@@ -163,9 +163,11 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
             SwitchActor source = sources[i];
 
             if (source == null) {
+                connection[i].remove();
+                connection[i] = null;
                 continue;
             }
-            if (getParent() != source.getParent()) {
+            if (source.getParent() == null || getParent() != source.getParent()) {
                 connection[i] = new ConnectionActor(this, source);
                 getStage().addActor(connection[i]);
             }
