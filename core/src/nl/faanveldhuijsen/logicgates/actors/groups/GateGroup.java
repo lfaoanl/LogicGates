@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import nl.faanveldhuijsen.logicgates.actors.BaseActor;
 import nl.faanveldhuijsen.logicgates.actors.GateActor;
 import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
+import nl.faanveldhuijsen.logicgates.actors.TextActor;
 import nl.faanveldhuijsen.logicgates.figures.GateFigure;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
 import nl.faanveldhuijsen.logicgates.logics.LogicType;
@@ -28,7 +29,7 @@ public class GateGroup extends BaseGroup {
 
     private Vector2 startDrag;
 
-    public GateGroup(int x, int y, int amountInputs, int amountOutputs) {
+    public GateGroup(int x, int y, String text, int amountInputs, int amountOutputs) {
         super();
 
         setWidth(48);
@@ -43,6 +44,9 @@ public class GateGroup extends BaseGroup {
         gateFigure.dispose();
 
         addActor(main);
+
+        TextActor title = new TextActor(text, Color.BLACK, getWidth() / 2, getHeight() / 2);
+        addActor(title);
 
         this.amountInputs = amountInputs;
         this.amountOutputs = amountOutputs;

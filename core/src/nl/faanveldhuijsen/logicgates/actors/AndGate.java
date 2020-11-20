@@ -13,7 +13,7 @@ public class AndGate extends GateGroup {
     SwitchActor input2;
 
     public AndGate(int x, int y) {
-        super(x, y, 2, 1);
+        super(x, y, "AND", 2, 1);
 
         input1 = addInput();
         input2 = addInput();
