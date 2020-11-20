@@ -28,7 +28,7 @@ public class ConnectionActor extends BaseActor {
 
     private PixelFigure createFigure() {
         PixelFigure pixelFigure = new PixelFigure();
-        setSprite(pixelFigure.getTexture());
+        setSprite(pixelFigure.getTexture(), getWidth(), getHeight());
         pixelFigure.dispose();
         return pixelFigure;
     }

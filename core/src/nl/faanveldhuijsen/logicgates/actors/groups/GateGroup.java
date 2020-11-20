@@ -32,15 +32,15 @@ public class GateGroup extends BaseGroup {
     public GateGroup(int x, int y, String text, int amountInputs, int amountOutputs) {
         super();
 
-        setWidth(48);
+        setWidth(96);
         float height = getWidth() / 2 * Math.max(amountInputs, amountOutputs);
         setHeight(height);
         setPosition(x, y);
 
         main = new GateActor(0, 0);
 
-        GateFigure gateFigure = new GateFigure((int) getWidth(), (int) getHeight(), GATE_COLOR);
-        main.setSprite(gateFigure.getTexture());
+        GateFigure gateFigure = new GateFigure(Math.max(amountInputs, amountOutputs));
+        main.setSprite(gateFigure.getTexture(), getWidth(), getHeight());
         gateFigure.dispose();
 
         addActor(main);
@@ -61,7 +61,7 @@ public class GateGroup extends BaseGroup {
     }
 
     private SwitchActor addChild(float x, int amount, ArrayList<SwitchActor> actors, LogicType type, SwitchActor... sources) {
-        int size = 5;
+        int size = 10;
         float heightOffset = getHeight() / (amount + 1);
         SwitchActor switchActor = new SwitchActor(x - (size * 2), (heightOffset * (actors.size() + 1)) - (size * 2), size, type, sources);
 

@@ -32,10 +32,10 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
     }
 
     public SwitchActor(float x, float y, int size, LogicType type, SwitchActor... sources) {
-        super(x,y);//x - (size * 2), y - (size * 2));
+        super(x, y);//x - (size * 2), y - (size * 2));
 
         CircleFigure circleFigure = new CircleFigure(size, COLOR_OFF);
-        setSprite(circleFigure.getTexture());
+        setSprite(circleFigure.getTexture(), size * 4, size * 4);
 
         this.sources = sources;
         this.type = type;

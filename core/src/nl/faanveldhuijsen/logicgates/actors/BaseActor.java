@@ -30,8 +30,9 @@ public abstract class BaseActor extends Actor {
         return sprite;
     }
 
-    public void setSprite(Texture texture) {
+    public void setSprite(Texture texture, float width, float height) {
         sprite = new Sprite(texture);
+        sprite.setSize(width, height);
         sprite.setPosition(getX(), getY());
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
     }
