@@ -20,6 +20,7 @@ public class LogicGates extends ApplicationAdapter {
 
     @Override
     public void render() {
+        Gdx.gl.glClearColor(stage.background.r, stage.background.g, stage.background.b, 1.0F);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(Gdx.graphics.getDeltaTime());
@@ -29,5 +30,12 @@ public class LogicGates extends ApplicationAdapter {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+
+        stage.getViewport().update(width, height);
     }
 }

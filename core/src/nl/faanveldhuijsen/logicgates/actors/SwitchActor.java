@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import nl.faanveldhuijsen.logicgates.figures.CircleFigure;
@@ -26,6 +27,7 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     private ConnectionActor[] connection = new ConnectionActor[2];
     private SwitchActor[] sources = new SwitchActor[2];
+    private SwitchActor hoveredActor;
 
     public SwitchActor(float x, float y, int size, LogicType type) {
         this(x, y, size, type, null);
@@ -42,7 +44,6 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         this.size = size;
 
         circleFigure.dispose();
-
 
 
         enableTouchDown();
@@ -123,6 +124,19 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
     @Override
     public void drag(InputEvent event, float x, float y, int pointer) {
 //        connection.paint(event.getStageX(), event.getStageY());
+//        if (type != LogicType.COPY) {
+//            SwitchActor target = findHoveredActor(getStage().getActors());
+//            if (target != null) { // && target.type == LogicType.COPY) {
+//                ScaleToAction scale = new ScaleToAction();
+//                scale.setScale(1.5f);
+//                scale.setDuration(0.5f);
+//                target.addAction(scale);
+//                hoveredActor = target;
+//            }
+//            if (target == null && hoveredActor != null) {
+//                hoveredActor.setScale(1.0f);
+//            }
+//        }
     }
 
     @Override
