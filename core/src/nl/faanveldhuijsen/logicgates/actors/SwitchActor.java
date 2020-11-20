@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
+import nl.faanveldhuijsen.logicgates.actors.groups.BaseGroup;
 import nl.faanveldhuijsen.logicgates.figures.CircleFigure;
 import nl.faanveldhuijsen.logicgates.logics.Clickable;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
@@ -17,7 +18,7 @@ import nl.faanveldhuijsen.logicgates.logics.SwitchLogic;
 
 public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Draggable {
 
-    private static final Color COLOR_ON = new Color(0.7f, 0.2f, 0.2f, 1f);
+    private static final Color COLOR_ON = new Color(0.7f, 0.2f, 0.2f, 1.0f);
     private static final Color COLOR_OFF = new Color(0.9f, 0.9f, 0.9f, 1.0f);
 
     public final LogicType type;
@@ -25,9 +26,10 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     private boolean on = false;
 
-    private ConnectionActor[] connection = new ConnectionActor[2];
+    private ConnectionActor connection;
     private SwitchActor[] sources = new SwitchActor[2];
-    private SwitchActor hoveredActor;
+
+    private ConnectionActor tmpConnection;
 
     public SwitchActor(float x, float y, int size, LogicType type) {
         this(x, y, size, type, null);
@@ -117,26 +119,29 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     @Override
     public void dragStart(InputEvent event, float x, float y, int pointer) {
-//        connection[1] = new ConnectionActor(this, x, y);
-//        getStage().addActor(connection[1]);
+        tmpConnection = new ConnectionActor(this);
+        tmpConnection.setColor(Color.LIGHT_GRAY);
+        getStage().addActor(tmpConnection);
     }
 
     @Override
     public void drag(InputEvent event, float x, float y, int pointer) {
-//        connection.paint(event.getStageX(), event.getStageY());
-//        if (type != LogicType.COPY) {
-//            SwitchActor target = findHoveredActor(getStage().getActors());
-//            if (target != null) { // && target.type == LogicType.COPY) {
+        tmpConnection.paint(event.getStageX(), event.getStageY());
+
+        if (type != LogicType.COPY) {
+            SwitchActor target = findHoveredActor(getStage().getActors());
+            if (target != null && target.type == LogicType.COPY) {
+                tmpConnection.snapTo(target.getPosition());
 //                ScaleToAction scale = new ScaleToAction();
 //                scale.setScale(1.5f);
 //                scale.setDuration(0.5f);
 //                target.addAction(scale);
 //                hoveredActor = target;
-//            }
+            }
 //            if (target == null && hoveredActor != null) {
 //                hoveredActor.setScale(1.0f);
 //            }
-//        }
+        }
     }
 
     @Override
@@ -144,11 +149,10 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         if (type != LogicType.COPY) {
             SwitchActor target = findHoveredActor(getStage().getActors());
             if (target != null && target.type == LogicType.COPY) {
-                target.setSource(this);
-//                target.connection = connection;
-//                connection.setEnd(target);
-                return;
+                target.setSource(tmpConnection, this);
             }
+            tmpConnection.remove();
+            tmpConnection = null;
         }
 //        connection.remove();
 //        connection = null;
@@ -166,26 +170,33 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         return null;
     }
 
-    public void setSource(SwitchActor... sources) {
+    public void setSource(ConnectionActor tmp, SwitchActor... sources) {
         this.sources = sources;
 
-        if (sources == null) {
-            connection = null;
-            return;
-        }
-        for (int i = 0; i < sources.length; i++) {
-            SwitchActor source = sources[i];
+        if (sources.length == 1) {
+            SwitchActor source = sources[0];
 
             if (source == null) {
-                connection[i].remove();
-                connection[i] = null;
-                continue;
+                removeConnection();
+                return;
             }
-            if (source.getParent() == null || getParent() != source.getParent()) {
-                connection[i] = new ConnectionActor(this, source);
-                getStage().addActor(connection[i]);
+            boolean groupInstance = getParent() instanceof BaseGroup;
+            if (!groupInstance || getParent() != source.getParent()) {
+                if (connection != null) {
+                    connection.remove();
+                }
+                connection = new ConnectionActor(this, source);
+                Array<Vector2> path = tmp.getPath();
+                path.reverse();
+                connection.setPath(path);
+                getStage().addActor(connection);
             }
         }
+    }
+
+    private void removeConnection() {
+        connection.remove();
+        connection = null;
     }
 
     public Vector2 getPosition() {

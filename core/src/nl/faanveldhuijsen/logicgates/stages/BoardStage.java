@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import nl.faanveldhuijsen.logicgates.actors.AndGate;
+import nl.faanveldhuijsen.logicgates.actors.ConnectionActor;
 import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
 import nl.faanveldhuijsen.logicgates.figures.PixelFigure;
 import nl.faanveldhuijsen.logicgates.logics.LogicType;
@@ -30,12 +31,13 @@ public class BoardStage extends Stage {
         AndGate andGate = new AndGate((int) (getWidth() / 2) - 48, (int) (getHeight() / 2) - 48);
 
         Actor output = new SwitchActor(getWidth() - 50, (getHeight() / 2) + 5, 10, LogicType.COPY);
-
+        Actor output2 = new SwitchActor(getWidth() - 50, (getHeight() / 4) + 5, 10, LogicType.COPY);
 
         addActor(input1);
         addActor(input2);
         addActor(andGate);
         addActor(output);
+        addActor(output2);
 
     }
 
