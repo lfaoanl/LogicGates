@@ -1,20 +1,13 @@
 package nl.faanveldhuijsen.logicgates.actors;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import nl.faanveldhuijsen.logicgates.figures.ConnectionFigure;
-import nl.faanveldhuijsen.logicgates.logics.Clickable;
+import nl.faanveldhuijsen.logicgates.figures.PixelFigure;
 import space.earlygrey.shapedrawer.ShapeDrawer;
-
-import java.util.ArrayList;
 
 public class ConnectionActor extends BaseActor {
 
-    private ConnectionFigure connectionFigure;
+    private PixelFigure pixelFigure;
     private final SwitchActor start;
     private SwitchActor end;
     private Vector2 tmpEnd;
@@ -26,23 +19,23 @@ public class ConnectionActor extends BaseActor {
         this.start = start;
         this.end = end;
 
-        connectionFigure = createFigure();
+        pixelFigure = createFigure();
 
 //        positions.add(getStartPosition());
 //        positions.add(getEndPosition());
 
     }
 
-    private ConnectionFigure createFigure() {
-        ConnectionFigure connectionFigure = new ConnectionFigure(getStartPosition(), getEndPosition());
-        setSprite(connectionFigure.getTexture());
-        connectionFigure.dispose();
-        return connectionFigure;
+    private PixelFigure createFigure() {
+        PixelFigure pixelFigure = new PixelFigure();
+        setSprite(pixelFigure.getTexture());
+        pixelFigure.dispose();
+        return pixelFigure;
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        ShapeDrawer drawer = connectionFigure.getDrawer(batch);
+        ShapeDrawer drawer = pixelFigure.getDrawer(batch);
 
         drawer.setColor(start.getOutputColor());
         drawer.line(getStartPosition(), getEndPosition());

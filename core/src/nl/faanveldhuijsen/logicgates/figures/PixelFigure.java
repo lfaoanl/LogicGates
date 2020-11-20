@@ -8,11 +8,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
-public class ConnectionFigure extends BaseFigure {
+public class PixelFigure extends BaseFigure {
 
     private final TextureRegion pixelRegion;
 
-    public ConnectionFigure(Vector2 pos1, Vector2 pos2) {
+    public PixelFigure() {
         super(1, 1);
 
         setColor(Color.WHITE);
