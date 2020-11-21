@@ -14,6 +14,8 @@ public abstract class BaseActor extends Actor {
 
     protected ClickListener clickListener;
     protected Sprite sprite;
+    private float width;
+    private float height;
 
     public BaseActor(float x, float y) {
         setX(x);
@@ -32,6 +34,8 @@ public abstract class BaseActor extends Actor {
 
     public void setSprite(Texture texture, float width, float height) {
         sprite = new Sprite(texture);
+        this.width = width;
+        this.height = height;
         sprite.setSize(width, height);
         sprite.setPosition(getX(), getY());
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
@@ -41,6 +45,11 @@ public abstract class BaseActor extends Actor {
         if (this instanceof Clickable) {
             setTouchable(Touchable.enabled);
             addListener(clickListener = new ClickListener() {
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    ((Clickable) BaseActor.this).touchUp(event, x, y, pointer, button);
+                }
+
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     return ((Clickable) BaseActor.this).touchDown(event, x, y, pointer, button);
                 }
@@ -75,5 +84,4 @@ public abstract class BaseActor extends Actor {
     public ClickListener getClickListener() {
         return clickListener;
     }
-
 }

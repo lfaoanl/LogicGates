@@ -110,8 +110,21 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         if (type != LogicType.SWITCH) {
             return false;
         }
-        setOutput(!getOutput());
+        ScaleToAction scale = new ScaleToAction();
+        scale.setDuration(0.2f);
+        scale.setScale(0.9f);
+        addAction(scale);
         return true;
+    }
+
+    @Override
+    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        setOutput(!getOutput());
+
+        ScaleToAction scale = new ScaleToAction();
+        scale.setDuration(0.2f);
+        scale.setScale(1.0f);
+        addAction(scale);
     }
 
     @Override
@@ -192,8 +205,10 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
     }
 
     private void removeConnection() {
-        connection.remove();
-        connection = null;
+        if (connection != null){
+            connection.remove();
+            connection = null;
+        }
     }
 
     public Vector2 getPosition() {
@@ -205,4 +220,8 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         return center;
     }
 
+    public void clearConnections() {
+        this.removeConnection();
+        this.sources = new SwitchActor[2];
+    }
 }

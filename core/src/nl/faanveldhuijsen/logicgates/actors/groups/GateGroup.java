@@ -87,4 +87,12 @@ public class GateGroup extends BaseGroup {
         return returnable;
     }
 
+    public ArrayList<SwitchActor> getInputs() {
+        return inputs;
+    }
+
+    @Override
+    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+    }
 }

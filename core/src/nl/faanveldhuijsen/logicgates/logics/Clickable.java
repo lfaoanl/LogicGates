@@ -8,5 +8,7 @@ public interface Clickable {
 
     boolean touchDown(InputEvent event, float x, float y, int pointer, int button);
 
+    void touchUp(InputEvent event, float x, float y, int pointer, int button);
+
     ClickListener getClickListener();
 }

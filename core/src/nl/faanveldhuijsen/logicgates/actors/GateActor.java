@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import nl.faanveldhuijsen.logicgates.actors.groups.GateGroup;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
 
 public class GateActor extends BaseActor implements Draggable {
@@ -19,9 +20,13 @@ public class GateActor extends BaseActor implements Draggable {
 
     @Override
     public void dragStart(InputEvent event, float x, float y, int pointer) {
-        Group parent = getParent();
+        GateGroup parent = (GateGroup) getParent();
         parent.setScale(1.1f);
         startDrag = new Vector2(parent.getX() - event.getStageX(), parent.getY() - event.getStageY());
+
+        for (SwitchActor input : parent.getInputs()) {
+            input.clearConnections();
+        }
     }
 
     @Override

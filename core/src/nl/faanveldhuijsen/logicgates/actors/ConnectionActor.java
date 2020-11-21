@@ -81,9 +81,9 @@ public class ConnectionActor extends BaseActor {
 
         drawer.path(positions, 4, JoinType.SMOOTH, true);
         font.draw(batch, "start", positions.first().x, positions.first().y);
-        for (int i = 0; i < positions.size; i++) {
-            drawer.filledCircle(positions.get(i), 6);
-        }
+//        for (int i = 0; i < positions.size; i++) {
+//            drawer.filledCircle(positions.get(i), 6);
+//        }
         font.draw(batch, "end", getEndPosition().x, getEndPosition().y);
     }
 
