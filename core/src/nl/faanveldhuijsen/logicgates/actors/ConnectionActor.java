@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import nl.faanveldhuijsen.logicgates.figures.PixelFigure;
+import nl.faanveldhuijsen.logicgates.logics.ConnectionPoints;
 import space.earlygrey.shapedrawer.JoinType;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
@@ -15,7 +16,7 @@ public class ConnectionActor extends BaseActor {
     private PixelFigure pixelFigure;
     private SwitchActor start;
     private SwitchActor end;
-    private Array<Vector2> path = new Array<>();
+    private ConnectionPoints path = new ConnectionPoints();
 
     private final BitmapFont font = new BitmapFont();
 
@@ -33,22 +34,7 @@ public class ConnectionActor extends BaseActor {
 
         this.previousStart = getStartPosition();
 
-        prettifyPoints();
-
         pixelFigure = createFigure();
-
-//        positions.add(getStartPosition());
-//        positions.add(new Vector2(getStartPosition().x + 40, getStartPosition().y));
-//        positions.add(new Vector2(getStartPosition().x + 40, getEndPosition().y));
-
-//        positions.add(getEndPosition());
-    }
-
-    private void prettifyPoints() {
-        for (int i = 1; i < path.size - 1; i++) {
-
-
-        }
     }
 
     public ConnectionActor(SwitchActor start) {
@@ -98,7 +84,7 @@ public class ConnectionActor extends BaseActor {
 
     public void paint(float x, float y) {
         Vector2 point = new Vector2(x, y);
-        if (path.size == 0) {
+        if (path.isEmpty()) {
             point.y = (Math.round(getStartPosition().y / 16) * 16) + getStartPosition().y % 16;
             path.add(point);
             return;
@@ -116,7 +102,7 @@ public class ConnectionActor extends BaseActor {
         }
         point = normalize(point);
 
-        path.set(path.size - 1, point);
+        path.last(point);
     }
 
     public void snapTo(Vector2 position) {
@@ -149,9 +135,9 @@ public class ConnectionActor extends BaseActor {
         }
 
         if (begin) {
-            path.set(0, position);
+            path.first(position);
         } else {
-            path.set(path.size - 1, position);
+            path.last(position);
         }
     }
 
@@ -171,33 +157,31 @@ public class ConnectionActor extends BaseActor {
 
     private Vector2 getEndPosition() {
         if (end == null) {
-            return path.get(path.size - 1);
+            return path.last();
         }
         return end.getPosition();
     }
 
     private boolean nearLastPoint(Vector2 point) {
-        return point.dst(path.get(path.size - 1)) < 8;
+        return point.dst(path.last()) < 8;
     }
 
     private Vector2 normalize(Vector2 point) {
         if (direction == Direction.HORIZONTAL) {
-            point.y = path.get(path.size - 1).y;
-//            point.y = Math.round(point.y / 16) * 16;
+            point.y = path.last().y;
         } else {
-            point.x = path.get(path.size - 1).x;
-//            point.x = Math.round(point.x / 16) * 16;
+            point.x = path.last().x;
         }
         return point;
     }
 
     private boolean switchDirection(Vector2 point) {
 
-        if (direction == Direction.HORIZONTAL && Math.abs(path.get(path.size - 1).y - point.y) > 32) {
+        if (direction == Direction.HORIZONTAL && Math.abs(path.last().y - point.y) > 32) {
             direction = Direction.VERTICAL;
             return true;
         }
-        if (direction == Direction.VERTICAL && Math.abs(path.get(path.size - 1).x - point.x) > 32) {
+        if (direction == Direction.VERTICAL && Math.abs(path.last().x - point.x) > 32) {
             direction = Direction.HORIZONTAL;
             return true;
         }
@@ -205,11 +189,11 @@ public class ConnectionActor extends BaseActor {
         return false;
     }
 
-    public Array<Vector2> getPath() {
+    public ConnectionPoints getPath() {
         return path;
     }
 
-    public void setPath(Array<Vector2> path) {
+    public void setPath(ConnectionPoints path) {
         this.path = path;
     }
 

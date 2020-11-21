@@ -199,7 +199,7 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
                     connection.remove();
                 }
                 connection = new ConnectionActor(this, source);
-                Array<Vector2> path = tmp.getPath();
+                ConnectionPoints path = tmp.getPath();
                 path.reverse();
                 connection.setPath(path);
                 getStage().addActor(connection);
