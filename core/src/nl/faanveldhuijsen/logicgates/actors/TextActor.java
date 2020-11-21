@@ -1,5 +1,6 @@
 package nl.faanveldhuijsen.logicgates.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,12 +10,12 @@ import com.badlogic.gdx.math.Vector2;
 public class TextActor extends BaseActor {
 
     private String text;
-    private final BitmapFont font = new BitmapFont();
+    private final BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/Pixeled.fnt"));
     private Vector2 offset;
 
     public TextActor(String text, Color color, float x, float y) {
         super(x, y);
-        setText(text);
+        setText(text.toUpperCase());
         setColor(color);
     }
 

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import nl.faanveldhuijsen.logicgates.logics.Clickable;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
 
-public abstract class BaseActor extends Actor {
+public class BaseActor extends Actor {
 
     protected ClickListener clickListener;
     protected Sprite sprite;
@@ -36,6 +36,10 @@ public abstract class BaseActor extends Actor {
         sprite = new Sprite(texture);
         this.width = width;
         this.height = height;
+        setSprite();
+    }
+
+    private void setSprite() {
         sprite.setSize(width, height);
         sprite.setPosition(getX(), getY());
         setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());

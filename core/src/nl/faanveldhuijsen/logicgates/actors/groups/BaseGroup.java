@@ -24,6 +24,11 @@ public abstract class BaseGroup extends Group implements Clickable {
             setTouchable(Touchable.enabled);
             addListener(clickListener = new ClickListener() {
                 @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    ((Clickable) BaseGroup.this).touchUp(event, x, y, pointer, button);
+                }
+
+                @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     return ((Clickable) BaseGroup.this).touchDown(event, x, y, pointer, button);
                 }
@@ -63,8 +68,4 @@ public abstract class BaseGroup extends Group implements Clickable {
         return clickListener;
     }
 
-    @Override
-    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        return false;
-    }
 }

@@ -227,4 +227,13 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         this.removeConnection();
         this.sources = new SwitchActor[2];
     }
+
+    @Override
+    protected void positionChanged() {
+        super.positionChanged();
+
+        if (sprite != null) {
+            sprite.setPosition(getX(), getY());
+        }
+    }
 }

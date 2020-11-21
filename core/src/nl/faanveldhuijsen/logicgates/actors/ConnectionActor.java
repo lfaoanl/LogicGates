@@ -11,6 +11,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class ConnectionActor extends BaseActor {
 
+    private static final boolean DEBUG = false;
     private Vector2 previousStart;
     private PixelFigure pixelFigure;
     private SwitchActor start;
@@ -75,11 +76,14 @@ public class ConnectionActor extends BaseActor {
         Array<Vector2> positions = getPositions();
 
         drawer.path(positions, 4, JoinType.SMOOTH, true);
-        font.draw(batch, "start", positions.first().x, positions.first().y);
-        for (int i = 0; i < positions.size; i++) {
-            drawer.filledCircle(positions.get(i), 6);
+
+        if (DEBUG) {
+            font.draw(batch, "start", positions.first().x, positions.first().y);
+            for (int i = 0; i < positions.size; i++) {
+                drawer.filledCircle(positions.get(i), 6);
+            }
+            font.draw(batch, "end", getEndPosition().x, getEndPosition().y);
         }
-        font.draw(batch, "end", getEndPosition().x, getEndPosition().y);
     }
 
     public void paint(float x, float y) {

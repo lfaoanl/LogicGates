@@ -92,6 +92,11 @@ public class GateGroup extends BaseGroup {
     }
 
     @Override
+    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+        return false;
+    }
+
+    @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
     }
