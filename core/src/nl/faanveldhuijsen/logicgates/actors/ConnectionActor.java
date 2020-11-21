@@ -1,6 +1,5 @@
 package nl.faanveldhuijsen.logicgates.actors;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
@@ -22,12 +21,13 @@ public class ConnectionActor extends BaseActor {
 
 
     private enum Direction {
-            HORIZONTAL,VERTICAL;
+        HORIZONTAL, VERTICAL;
     }
+
     private Direction direction = Direction.HORIZONTAL;
 
     public ConnectionActor(SwitchActor start, SwitchActor end) {
-        super(0,0);
+        super(0, 0);
 
         this.start = start;
         this.end = end;
@@ -38,7 +38,7 @@ public class ConnectionActor extends BaseActor {
     }
 
     public ConnectionActor(SwitchActor start) {
-        super(0,0);
+        super(0, 0);
 
         this.start = start;
         this.previousStart = getStartPosition();
@@ -108,6 +108,7 @@ public class ConnectionActor extends BaseActor {
     public void snapTo(Vector2 position) {
         snapTo(position, false);
     }
+
     public void snapTo(Vector2 position, boolean begin) {
         Vector2 movable;
         if (begin) {
@@ -126,7 +127,7 @@ public class ConnectionActor extends BaseActor {
             movable = path.get(path.size - 2);
         }
 
-        if (movable != null && (path.size >= 2 || begin) ) {
+        if (movable != null && (path.size >= 2 || begin)) {
             if (direction == Direction.HORIZONTAL) {
                 movable.y = position.y;
             } else {
