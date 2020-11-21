@@ -33,6 +33,8 @@ public class ConnectionActor extends BaseActor {
 
         this.previousStart = getStartPosition();
 
+        prettifyPoints();
+
         pixelFigure = createFigure();
 
 //        positions.add(getStartPosition());
@@ -40,6 +42,13 @@ public class ConnectionActor extends BaseActor {
 //        positions.add(new Vector2(getStartPosition().x + 40, getEndPosition().y));
 
 //        positions.add(getEndPosition());
+    }
+
+    private void prettifyPoints() {
+        for (int i = 1; i < path.size - 1; i++) {
+
+
+        }
     }
 
     public ConnectionActor(SwitchActor start) {
@@ -64,7 +73,7 @@ public class ConnectionActor extends BaseActor {
         super.act(delta);
 
         if (!getStartPosition().equals(previousStart)) {
-            snapTo(previousStart, true);
+//            snapTo(previousStart, true);
             previousStart = getStartPosition();
         }
     }
@@ -81,9 +90,9 @@ public class ConnectionActor extends BaseActor {
 
         drawer.path(positions, 4, JoinType.SMOOTH, true);
         font.draw(batch, "start", positions.first().x, positions.first().y);
-//        for (int i = 0; i < positions.size; i++) {
-//            drawer.filledCircle(positions.get(i), 6);
-//        }
+        for (int i = 0; i < positions.size; i++) {
+            drawer.filledCircle(positions.get(i), 6);
+        }
         font.draw(batch, "end", getEndPosition().x, getEndPosition().y);
     }
 
@@ -107,7 +116,6 @@ public class ConnectionActor extends BaseActor {
         }
         point = normalize(point);
 
-
         path.set(path.size - 1, point);
     }
 
@@ -119,13 +127,14 @@ public class ConnectionActor extends BaseActor {
         if (begin) {
             movable = path.get(1);
         } else {
-            if (path.size <= 2) {
-                Vector2 lastPoint = path.pop();
-                Vector2 newPoint1 = new Vector2(position.x - 50, getStartPosition().y);
-                Vector2 newPoint2 = new Vector2(position.x - 50, position.y);
+            if (path.size <= 1) {
+                path.pop();
+                float x = getStartPosition().x + ((position.x - getStartPosition().x) / 2);
+                Vector2 newPoint1 = new Vector2(x, getStartPosition().y);
+                Vector2 newPoint2 = new Vector2(x, position.y);
                 path.add(newPoint1);
                 path.add(newPoint2);
-                path.add(lastPoint);
+                path.add(position);
                 return;
             }
             movable = path.get(path.size - 2);

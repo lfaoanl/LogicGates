@@ -107,6 +107,9 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+        if (connection != null) {
+            System.out.println(connection.getPath());
+        }
         if (type != LogicType.SWITCH) {
             return false;
         }

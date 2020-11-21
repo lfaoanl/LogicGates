@@ -24,9 +24,9 @@ public class GateActor extends BaseActor implements Draggable {
         parent.setScale(1.1f);
         startDrag = new Vector2(parent.getX() - event.getStageX(), parent.getY() - event.getStageY());
 
-        for (SwitchActor input : parent.getInputs()) {
-            input.clearConnections();
-        }
+//        for (SwitchActor input : parent.getInputs()) {
+//            input.clearConnections();
+//        }
     }
 
     @Override
