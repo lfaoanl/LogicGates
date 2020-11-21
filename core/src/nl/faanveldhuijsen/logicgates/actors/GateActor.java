@@ -38,8 +38,9 @@ public class GateActor extends BaseActor implements Draggable {
 
         float xPos = getParent().getX() + x + startDrag.x;
         float yPos = getParent().getY() + y + startDrag.y;
-        xPos = Math.round(xPos / 16) * 16;
-        yPos = Math.round(yPos / 16) * 16;
+        int gridSize = 16;
+        xPos = Math.round(xPos / gridSize) * gridSize;
+        yPos = Math.round(yPos / gridSize) * gridSize;
 
         getParent().setPosition(xPos, yPos);
     }

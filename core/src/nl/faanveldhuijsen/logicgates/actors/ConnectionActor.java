@@ -2,6 +2,7 @@ package nl.faanveldhuijsen.logicgates.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import nl.faanveldhuijsen.logicgates.figures.PixelFigure;
@@ -10,10 +11,14 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class ConnectionActor extends BaseActor {
 
+    private Vector2 previousStart;
     private PixelFigure pixelFigure;
     private SwitchActor start;
     private SwitchActor end;
     private Array<Vector2> path = new Array<>();
+
+    private final BitmapFont font = new BitmapFont();
+
 
     private enum Direction {
             HORIZONTAL,VERTICAL;
@@ -25,6 +30,8 @@ public class ConnectionActor extends BaseActor {
 
         this.start = start;
         this.end = end;
+
+        this.previousStart = getStartPosition();
 
         pixelFigure = createFigure();
 
@@ -39,6 +46,7 @@ public class ConnectionActor extends BaseActor {
         super(0,0);
 
         this.start = start;
+        this.previousStart = getStartPosition();
 
         pixelFigure = createFigure();
 
@@ -54,6 +62,11 @@ public class ConnectionActor extends BaseActor {
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        if (!getStartPosition().equals(previousStart)) {
+            snapTo(previousStart, true);
+            previousStart = getStartPosition();
+        }
     }
 
     @Override
@@ -64,7 +77,14 @@ public class ConnectionActor extends BaseActor {
 //        outputColor.a = 0.7f;
         drawer.setColor(start.getOutputColor());
 
-        drawer.path(getPositions(), 4, JoinType.SMOOTH, true);
+        Array<Vector2> positions = getPositions();
+
+        drawer.path(positions, 4, JoinType.SMOOTH, true);
+        font.draw(batch, "start", positions.first().x, positions.first().y);
+        for (int i = 0; i < positions.size; i++) {
+            drawer.filledCircle(positions.get(i), 6);
+        }
+        font.draw(batch, "end", getEndPosition().x, getEndPosition().y);
     }
 
     public void paint(float x, float y) {
@@ -75,7 +95,7 @@ public class ConnectionActor extends BaseActor {
             return;
         }
 
-        if (nearLastPoint(point) && path.size >= 3) {
+        if (nearLastPoint(point) && path.size >= 2) {
             direction = direction == Direction.HORIZONTAL ? Direction.VERTICAL : Direction.HORIZONTAL;
             path.pop();
         }
@@ -87,18 +107,43 @@ public class ConnectionActor extends BaseActor {
         }
         point = normalize(point);
 
+
         path.set(path.size - 1, point);
     }
 
     public void snapTo(Vector2 position) {
-        if (path.size >= 2) {
+        snapTo(position, false);
+    }
+    public void snapTo(Vector2 position, boolean begin) {
+        Vector2 movable;
+        if (begin) {
+            movable = path.get(1);
+        } else {
+            if (path.size <= 2) {
+                Vector2 lastPoint = path.pop();
+                Vector2 newPoint1 = new Vector2(position.x - 50, getStartPosition().y);
+                Vector2 newPoint2 = new Vector2(position.x - 50, position.y);
+                path.add(newPoint1);
+                path.add(newPoint2);
+                path.add(lastPoint);
+                return;
+            }
+            movable = path.get(path.size - 2);
+        }
+
+        if (movable != null && (path.size >= 2 || begin) ) {
             if (direction == Direction.HORIZONTAL) {
-                path.get(path.size - 2).y = position.y;
+                movable.y = position.y;
             } else {
-                path.get(path.size - 2).x = position.x;
+                movable.x = position.x;
             }
         }
-        path.set(path.size - 1, position);
+
+        if (begin) {
+            path.set(0, position);
+        } else {
+            path.set(path.size - 1, position);
+        }
     }
 
     private Array<Vector2> getPositions() {
@@ -123,7 +168,7 @@ public class ConnectionActor extends BaseActor {
     }
 
     private boolean nearLastPoint(Vector2 point) {
-        return point.dst(path.get(path.size - 1)) < 4;
+        return point.dst(path.get(path.size - 1)) < 8;
     }
 
     private Vector2 normalize(Vector2 point) {

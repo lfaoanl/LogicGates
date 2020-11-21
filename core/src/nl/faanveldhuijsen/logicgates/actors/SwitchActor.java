@@ -11,10 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import nl.faanveldhuijsen.logicgates.actors.groups.BaseGroup;
 import nl.faanveldhuijsen.logicgates.figures.CircleFigure;
-import nl.faanveldhuijsen.logicgates.logics.Clickable;
-import nl.faanveldhuijsen.logicgates.logics.Draggable;
-import nl.faanveldhuijsen.logicgates.logics.LogicType;
-import nl.faanveldhuijsen.logicgates.logics.SwitchLogic;
+import nl.faanveldhuijsen.logicgates.logics.*;
 
 public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Draggable {
 
