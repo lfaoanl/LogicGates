@@ -1,9 +1,11 @@
+apply plugin: "java"
+
 sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.main.resources.srcDirs = ["../core/assets"]
+sourceSets.main.resources.srcDirs = ["../android/assets"]
 
 project.ext.mainClassName = "nl.faanveldhuijsen.logicgates.desktop.DesktopLauncher"
-project.ext.assetsDir = new File("../core/assets")
+project.ext.assetsDir = new File("../android/assets")
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -35,5 +37,3 @@ task dist(type: Jar) {
 
 
 dist.dependsOn classes
-
-eclipse.project.name = appName + "-desktop"

@@ -33,7 +33,7 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
     }
 
     public SwitchActor(float x, float y, int size, LogicType type, SwitchActor... sources) {
-        super(x, y);//x - (size * 2), y - (size * 2));
+        super(x, y);
 
         CircleFigure circleFigure = new CircleFigure(size, COLOR_OFF);
         setSprite(circleFigure.getTexture(), size * 4, size * 4);
@@ -142,7 +142,7 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         tmpConnection.paint(event.getStageX(), event.getStageY());
 
         if (type != LogicType.COPY) {
-            SwitchActor target = findHoveredActor(getStage().getActors());
+            SwitchActor target = findHoveredActor(event.getStageX(), event.getStageY(), getStage().getActors());
             if (target != null && target.type == LogicType.COPY) {
                 tmpConnection.snapTo(target.getPosition());
 //                ScaleToAction scale = new ScaleToAction();
@@ -160,7 +160,7 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
     @Override
     public void dragStop(InputEvent event, float x, float y, int pointer, DragListener self) {
         if (type != LogicType.COPY) {
-            SwitchActor target = findHoveredActor(getStage().getActors());
+            SwitchActor target = findHoveredActor(event.getStageX(), event.getStageY(), getStage().getActors());
             if (target != null && target.type == LogicType.COPY) {
                 target.setSource(tmpConnection, this);
             }
@@ -171,13 +171,21 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 //        connection = null;
     }
 
-    public static SwitchActor findHoveredActor(Array<Actor> actors) {
+    public static SwitchActor findHoveredActor(float x, float y, Array<Actor> actors) {
         for (Actor actor : actors) {
-            if (actor instanceof Clickable && ((Clickable) actor).getClickListener().isOver()) {
-                if (actor instanceof Group) {
-                    return findHoveredActor(((Group) actor).getChildren());
+            if (actor instanceof BaseGroup) {
+                SwitchActor a = findHoveredActor(x - actor.getX(), y - actor.getY(), ((BaseGroup) actor).getChildren());
+                System.out.println(a);
+                if (a != null) {
+                    return a;
                 }
-                return (SwitchActor) actor;
+            } else if (actor instanceof SwitchActor) {
+                if (x > actor.getX() && x < actor.getX() + actor.getWidth()) {
+                    if (y > actor.getY() && y < actor.getY() + actor.getHeight()) {
+                        return (SwitchActor) actor;
+                    }
+                }
+
             }
         }
         return null;

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import nl.faanveldhuijsen.logicgates.actors.AndGate;
 import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
@@ -25,7 +26,7 @@ public class BoardStage extends Stage {
     private SwitchList outputs;
 
     public BoardStage() {
-        super(new ScreenViewport());
+        super(new ExtendViewport(640, 420));
         pixel = new PixelFigure();
     }
 
