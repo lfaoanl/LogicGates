@@ -20,7 +20,7 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
     private static final Color COLOR_OFF = new Color(0.9f, 0.9f, 0.9f, 1.0f);
 
     public final LogicType type;
-    private final int size;
+    private int size;
 
     private boolean on = false;
 
@@ -30,6 +30,11 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     public SwitchActor(float x, float y, int size, LogicType type) {
         this(x, y, size, type, (SwitchActor[]) null);
+    }
+
+    public SwitchActor(LogicType type) {
+        super(0, 0);
+        this.type = type;
     }
 
     public SwitchActor(float x, float y, int size, LogicType type, SwitchActor... sources) {
@@ -73,6 +78,7 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
             case NOT:
                 return !getSourceOutput(0);
             case COPY:
+            case OUTPUT:
                 return getSourceOutput(0);
         }
         return false;
@@ -173,6 +179,10 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
             }
         }
         return null;
+    }
+
+    public void setSource(SwitchActor... sources) {
+        this.sources = sources;
     }
 
     public void setSource(ConnectionActor tmp, SwitchActor... sources) {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import nl.faanveldhuijsen.logicgates.actors.groups.ButtonGroup;
 import nl.faanveldhuijsen.logicgates.figures.PixelFigure;
 import nl.faanveldhuijsen.logicgates.gates.AndGate;
+import nl.faanveldhuijsen.logicgates.gates.CustomGate;
 import nl.faanveldhuijsen.logicgates.gates.NotGate;
 import nl.faanveldhuijsen.logicgates.logics.AddGateAction;
 import nl.faanveldhuijsen.logicgates.logics.ButtonAction;
@@ -65,6 +66,12 @@ public class BoardStage extends Stage {
         final ButtonGroup addNotGate = new ButtonGroup("NOT", 144, 16, 64, 32);
         addNotGate.onAction(new AddGateAction(this, addNotGate, NotGate.class));
         addActor(addNotGate);
+
+
+
+        final ButtonGroup custom = new ButtonGroup("CSTM", 224, 16, 64, 32);
+        custom.onAction(new AddGateAction(this, custom, CustomGate.class, "gate_001"));
+        addActor(custom);
     }
 
     @Override

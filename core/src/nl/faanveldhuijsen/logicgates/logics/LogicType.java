@@ -4,5 +4,6 @@ public enum LogicType {
     COPY,
     AND,
     NOT,
-    SWITCH
+    SWITCH,
+    OUTPUT
 }

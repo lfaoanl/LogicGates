@@ -1,0 +1,41 @@
+{
+  "title": "NAND",
+  "switchCount": {
+    "input": 2,
+    "output": 1
+  },
+  "inputs": [
+    {
+      "id": "input_01"
+    },
+    {
+      "id": "input_02"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "output_01",
+      "logicType": "OUTPUT",
+      "sources": [
+        "switch_01"
+      ]
+    }
+  ],
+  "switches": [
+    {
+      "id": "switch_01",
+      "logicType": "NOT",
+      "sources": [
+        "switch_02"
+      ]
+    },
+    {
+      "id": "switch_02",
+      "logicType": "AND",
+      "sources": [
+        "input_01",
+        "input_02"
+      ]
+    }
+  ]
+}

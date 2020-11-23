@@ -27,16 +27,28 @@ public class GateGroup extends BaseGroup {
     protected ArrayList<SwitchActor> inputs = new ArrayList<>();
     protected ArrayList<SwitchActor> outputs = new ArrayList<>();
 
-    private Vector2 startDrag;
+    public GateGroup(float x, float y) {
+        setPosition(x, y);
+    }
 
     public GateGroup(float x, float y, String text, int amountInputs, int amountOutputs) {
-        super();
+        this(x, y);
 
-        setWidth(96);
-        float height = getWidth() / 2 * Math.max(amountInputs, amountOutputs);
-        setHeight(height);
-        setPosition(x, y);
+        this.amountInputs = amountInputs;
+        this.amountOutputs = amountOutputs;
+        setSize();
 
+        createMainBlock();
+
+        createTitle(text);
+    }
+
+    protected void createTitle(String text) {
+        TextActor title = new TextActor(text, Color.BLACK, getWidth() / 2, getHeight() / 2);
+        addActor(title);
+    }
+
+    protected void createMainBlock() {
         main = new GateActor(0, 0);
 
         GateFigure gateFigure = new GateFigure(Math.max(amountInputs, amountOutputs));
@@ -44,12 +56,12 @@ public class GateGroup extends BaseGroup {
         gateFigure.dispose();
 
         addActor(main);
+    }
 
-        TextActor title = new TextActor(text, Color.BLACK, getWidth() / 2, getHeight() / 2);
-        addActor(title);
-
-        this.amountInputs = amountInputs;
-        this.amountOutputs = amountOutputs;
+    protected void setSize() {
+        setWidth(96);
+        float height = getWidth() / 2 * Math.max(amountInputs, amountOutputs);
+        setHeight(height);
     }
 
     public SwitchActor addInput() {
@@ -71,20 +83,16 @@ public class GateGroup extends BaseGroup {
         return switchActor;
     }
 
-    public void addChildren() {
-        inputs = addChildren(0, amountInputs);
-        outputs = addChildren((int) getWidth(), amountOutputs);
+    protected void addInputs() {
+        for (int i = 0; i < amountInputs; i++) {
+            addInput();
+        }
     }
 
-    private ArrayList<SwitchActor> addChildren(int x, int amount) {
-        ArrayList<SwitchActor> returnable = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
-            float heightOffset = getHeight() / (amount + 1);
-            SwitchActor actor = new SwitchActor(x, (int) heightOffset * (i + 1), 5, LogicType.COPY);
-            returnable.add(actor);
-            addActor(actor);
+    protected void addOutputs() {
+        for (int i = 0; i < amountOutputs; i++) {
+            addOutput(LogicType.COPY, inputs.get(0));
         }
-        return returnable;
     }
 
     public ArrayList<SwitchActor> getInputs() {

@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
 import nl.faanveldhuijsen.logicgates.actors.groups.ButtonGroup;
 import nl.faanveldhuijsen.logicgates.actors.groups.GateGroup;
+import nl.faanveldhuijsen.logicgates.gates.CustomGate;
+
 import java.lang.reflect.Constructor;
 
 public class AddGateAction extends ButtonAction {
@@ -13,8 +15,13 @@ public class AddGateAction extends ButtonAction {
     private final Stage stage;
     private final ButtonGroup parent;
     private final Class<? extends GateGroup> gateClass;
+    private String customGate = null;
     private GateGroup gate;
 
+    public AddGateAction(Stage stage, ButtonGroup parent, Class<? extends GateGroup> gateClass, String gateId) {
+        this(stage, parent, gateClass);
+        this.customGate = gateId;
+    }
     public AddGateAction(Stage stage, ButtonGroup parent, Class<? extends GateGroup> gateClass) {
         this.stage = stage;
         this.parent = parent;
@@ -41,6 +48,9 @@ public class AddGateAction extends ButtonAction {
     }
 
     private GateGroup createGateInstance() {
+        if (customGate != null) {
+            return new CustomGate(parent.getX(), parent.getY(), customGate);
+        }
         try {
             Constructor<?> construct = gateClass.getConstructor(float.class, float.class);
             return (GateGroup) construct.newInstance(parent.getX(), parent.getY());
