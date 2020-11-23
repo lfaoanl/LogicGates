@@ -92,7 +92,8 @@ public class SwitchList {
     }
 
     public void reset() {
-        for (SwitchActor actor : switches) {
+        for (int i = 0; i < switches.size(); i++) {
+            SwitchActor actor = switches.get(i);
             remove(actor);
         }
 
@@ -104,5 +105,9 @@ public class SwitchList {
     public void remove(SwitchActor actor) {
         switches.remove(actor);
         actor.remove();
+    }
+
+    public ArrayList<SwitchActor> getSwitches() {
+        return switches;
     }
 }

@@ -4,26 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
 import nl.faanveldhuijsen.logicgates.actors.groups.GateGroup;
-import nl.faanveldhuijsen.logicgates.logics.LogicType;
+import nl.faanveldhuijsen.logicgates.data.GateData;
+import nl.faanveldhuijsen.logicgates.data.SwitchData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CustomGate extends GateGroup {
-
-    protected static class SwitchData {
-        String id;
-        LogicType logicType;
-        ArrayList<String> sources;
-    }
-
-    private static class GateData {
-        String title;
-        HashMap<String, Integer> switchCount;
-        ArrayList<SwitchData> inputs;
-        ArrayList<SwitchData> outputs;
-        ArrayList<SwitchData> switches;
-    }
 
     HashMap<String, SwitchActor> customInputs = new HashMap<>();
     HashMap<String, SwitchActor> customOutputs = new HashMap<>();
@@ -80,6 +67,7 @@ public class CustomGate extends GateGroup {
 
     private SwitchActor[] parseSources(SwitchData switchData) {
         SwitchActor[] sources = new SwitchActor[]{null, null};
+
         for (int i = 0; i < switchData.sources.size(); i++) {
             String src = switchData.sources.get(i);
 
@@ -94,6 +82,6 @@ public class CustomGate extends GateGroup {
 
     private GateData loadData(String gateId) {
         Json json = new Json();
-        return json.fromJson(GateData.class, Gdx.files.internal("data/gates/" + gateId + ".json"));
+        return json.fromJson(GateData.class, Gdx.files.local("data/gates/" + gateId + ".json"));
     }
 }

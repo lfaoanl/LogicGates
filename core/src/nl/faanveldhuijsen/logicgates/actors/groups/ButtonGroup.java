@@ -7,13 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import nl.faanveldhuijsen.logicgates.actors.BaseActor;
 import nl.faanveldhuijsen.logicgates.actors.TextActor;
 import nl.faanveldhuijsen.logicgates.figures.ButtonFigure;
-import nl.faanveldhuijsen.logicgates.logics.ButtonAction;
+import nl.faanveldhuijsen.logicgates.actions.ButtonAction;
 import nl.faanveldhuijsen.logicgates.logics.Clickable;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
 
 public class ButtonGroup extends BaseGroup implements Draggable, Clickable {
 
 
+    private String title;
     private ButtonAction action;
     public boolean disabled = false;
 
@@ -24,15 +25,16 @@ public class ButtonGroup extends BaseGroup implements Draggable, Clickable {
         setPosition(x, y);
 
         ButtonFigure figure = new ButtonFigure((int) getWidth(), (int) getHeight());
-        BaseActor actor = new BaseActor(0, 0);
-        actor.setSprite(figure.getTexture(), figure.getWidth(), figure.getHeight());
+        BaseActor main = new BaseActor(0, 0);
+        main.setSprite(figure.getTexture(), figure.getWidth(), figure.getHeight());
 
-        addActor(actor);
+        addActor(main);
     }
 
     public ButtonGroup(String title, float x, float y, int w, int h) {
         this(x, y, w, h);
 
+        this.title = title;
         TextActor text = new TextActor(title, Color.BLACK, getWidth() / 2, getHeight() / 2);
         addActor(text);
     }
@@ -52,11 +54,13 @@ public class ButtonGroup extends BaseGroup implements Draggable, Clickable {
 
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+        setScale(0.98f);
         return true;
     }
 
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        setScale(1.0f);
         if (action != null) {
             action.onClick();
         }
@@ -85,5 +89,9 @@ public class ButtonGroup extends BaseGroup implements Draggable, Clickable {
         if (action != null) {
             action.dragStop();
         }
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

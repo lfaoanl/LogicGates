@@ -3,7 +3,6 @@ package nl.faanveldhuijsen.logicgates.actors;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
@@ -11,8 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import nl.faanveldhuijsen.logicgates.actors.groups.BaseGroup;
 import nl.faanveldhuijsen.logicgates.actors.groups.GateGroup;
+import nl.faanveldhuijsen.logicgates.data.SwitchData;
 import nl.faanveldhuijsen.logicgates.figures.CircleFigure;
 import nl.faanveldhuijsen.logicgates.logics.*;
+
+import java.util.ArrayList;
 
 public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Draggable {
 
@@ -254,7 +256,7 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         return super.remove();
     }
 
-    private boolean isFromGate() {
+    public boolean isFromGate() {
         return hasParent() && getParent() instanceof GateGroup;
     }
 

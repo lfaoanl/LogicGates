@@ -1,4 +1,4 @@
-package nl.faanveldhuijsen.logicgates.logics;
+package nl.faanveldhuijsen.logicgates.actions;
 
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

@@ -1,21 +1,22 @@
 package nl.faanveldhuijsen.logicgates.stages;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import nl.faanveldhuijsen.logicgates.actions.CreateGateAction;
+import nl.faanveldhuijsen.logicgates.actors.ConnectionActor;
 import nl.faanveldhuijsen.logicgates.actors.groups.ButtonCarouselGroup;
 import nl.faanveldhuijsen.logicgates.actors.groups.ButtonGroup;
+import nl.faanveldhuijsen.logicgates.actors.groups.GateGroup;
 import nl.faanveldhuijsen.logicgates.figures.PixelFigure;
-import nl.faanveldhuijsen.logicgates.gates.AndGate;
-import nl.faanveldhuijsen.logicgates.gates.CustomGate;
-import nl.faanveldhuijsen.logicgates.gates.NotGate;
-import nl.faanveldhuijsen.logicgates.logics.AddGateAction;
-import nl.faanveldhuijsen.logicgates.logics.ButtonAction;
+import nl.faanveldhuijsen.logicgates.actions.ButtonAction;
 import nl.faanveldhuijsen.logicgates.logics.LogicType;
 import nl.faanveldhuijsen.logicgates.logics.SwitchList;
 import space.earlygrey.shapedrawer.ShapeDrawer;
+
+import java.util.ArrayList;
 
 public class BoardStage extends Stage {
 
@@ -24,13 +25,15 @@ public class BoardStage extends Stage {
 
     public final SwitchList inputs;
     public final SwitchList outputs;
-    public ButtonCarouselGroup buttonCarousel;
+
+    public ButtonCarouselGroup buttons;
 
     public BoardStage() {
         super(new ExtendViewport(640, 420));
         pixel = new PixelFigure();
         inputs = new SwitchList(this, 2, 5, getHeight());
         outputs = new SwitchList(this, 1, 5, getHeight());
+        buttons = new ButtonCarouselGroup(this, 64, 16, getWidth(), 64);
     }
 
     public void init() {
@@ -61,7 +64,11 @@ public class BoardStage extends Stage {
         addActor(addInput);
         addActor(addOutput);
 
-        addActor(new ButtonCarouselGroup(this, 64, 16, getWidth(), 64));
+        addActor(buttons);
+
+        ButtonGroup convertToGate = new ButtonGroup("Create gate", getWidth() - 128 - 96, getHeight() - 64, 128 + 64, 48);
+        convertToGate.onAction(new CreateGateAction(this));
+        addActor(convertToGate);
     }
 
     @Override
@@ -91,4 +98,8 @@ public class BoardStage extends Stage {
     }
 
 
+    public void reset() {
+        this.clear();
+        this.init();
+    }
 }
