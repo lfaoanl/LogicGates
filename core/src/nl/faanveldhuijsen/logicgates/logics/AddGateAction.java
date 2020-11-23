@@ -4,31 +4,32 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
-import nl.faanveldhuijsen.logicgates.gates.AndGate;
 import nl.faanveldhuijsen.logicgates.actors.groups.ButtonGroup;
 import nl.faanveldhuijsen.logicgates.actors.groups.GateGroup;
+import java.lang.reflect.Constructor;
 
 public class AddGateAction extends ButtonAction {
 
-    private GateGroup gate;
     private final Stage stage;
     private final ButtonGroup parent;
+    private final Class<? extends GateGroup> gateClass;
+    private GateGroup gate;
 
-    public AddGateAction(Stage stage, ButtonGroup parent) {
+    public AddGateAction(Stage stage, ButtonGroup parent, Class<? extends GateGroup> gateClass) {
         this.stage = stage;
         this.parent = parent;
+        this.gateClass = gateClass;
     }
 
     @Override
     public void dragStart() {
-        gate = new AndGate(parent.getX(), parent.getY());
+        gate = createGateInstance();
         stage.addActor(gate);
 
         Color oldColor = new Color(gate.getColor());
         Color newColor = new Color(oldColor);
         newColor.a = 0;
         gate.setColor(newColor);
-
 
         ColorAction fadeIn = new ColorAction();
 
@@ -37,7 +38,16 @@ public class AddGateAction extends ButtonAction {
         fadeIn.setDuration(0.2f);
         gate.addAction(fadeIn);
         gate.setZIndex(10);
+    }
 
+    private GateGroup createGateInstance() {
+        try {
+            Constructor<?> construct = gateClass.getConstructor(float.class, float.class);
+            return (GateGroup) construct.newInstance(parent.getX(), parent.getY());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

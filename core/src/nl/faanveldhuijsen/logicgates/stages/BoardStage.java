@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import nl.faanveldhuijsen.logicgates.actors.groups.ButtonGroup;
 import nl.faanveldhuijsen.logicgates.figures.PixelFigure;
+import nl.faanveldhuijsen.logicgates.gates.AndGate;
+import nl.faanveldhuijsen.logicgates.gates.NotGate;
 import nl.faanveldhuijsen.logicgates.logics.AddGateAction;
 import nl.faanveldhuijsen.logicgates.logics.ButtonAction;
 import nl.faanveldhuijsen.logicgates.logics.LogicType;
@@ -57,9 +59,12 @@ public class BoardStage extends Stage {
         addActor(addOutput);
 
         final ButtonGroup addAndGate = new ButtonGroup("AND", 64, 16, 64, 32);
-
-        addAndGate.onAction(new AddGateAction(this, addAndGate));
+        addAndGate.onAction(new AddGateAction(this, addAndGate, AndGate.class));
         addActor(addAndGate);
+
+        final ButtonGroup addNotGate = new ButtonGroup("NOT", 144, 16, 64, 32);
+        addNotGate.onAction(new AddGateAction(this, addNotGate, NotGate.class));
+        addActor(addNotGate);
     }
 
     @Override
