@@ -38,13 +38,11 @@ public class ButtonGroup extends BaseGroup {
 
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        System.out.println("touchDown");
         return true;
     }
 
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        System.out.println("TouchUp");
         if (clickAction != null) {
             clickAction.onClick();
         }

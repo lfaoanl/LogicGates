@@ -88,4 +88,10 @@ public class BaseActor extends Actor {
     public ClickListener getClickListener() {
         return clickListener;
     }
+
+    /**
+     * Returns center position of actor
+     * @return Vector2
+     */
+//    public abstract Vector2 getPosition();
 }

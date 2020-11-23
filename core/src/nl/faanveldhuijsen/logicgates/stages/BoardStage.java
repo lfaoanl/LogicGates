@@ -22,49 +22,40 @@ public class BoardStage extends Stage {
     public final Color background = new Color(0.2f, 0.2f, 0.2f, 1.0f);
     public final PixelFigure pixel;
 
-    private SwitchList inputs;
-    private SwitchList outputs;
+    public final SwitchList inputs;
+    public final SwitchList outputs;
 
     public BoardStage() {
         super(new ExtendViewport(640, 420));
         pixel = new PixelFigure();
+        inputs = new SwitchList(this, 2, 5, getHeight());
+        outputs = new SwitchList(this, 1, 5, getHeight());
     }
 
     public void init() {
-
-        inputs = new SwitchList(getHeight());
-        outputs = new SwitchList(getHeight());
-
-//        SwitchActor input1 = new SwitchActor(20, getHeight() / 3, 10, LogicType.SWITCH);
-//        SwitchActor input2 = new SwitchActor(20, getHeight() / 3 * 2, 10, LogicType.SWITCH);
-//
         AndGate andGate = new AndGate((int) (getWidth() / 2) - 48, (int) (getHeight() / 2) - 48);
-//
-//        Actor output = new SwitchActor(getWidth() - 50, (getHeight() / 2) + 5, 10, LogicType.COPY);
-//        Actor output2 = new SwitchActor(getWidth() - 50, (getHeight() / 4) + 5, 10, LogicType.COPY);
-//
-//        addActor(input1);
-//        addActor(input2);
         addActor(andGate);
-//        addActor(output);
-//        addActor(output2);
 
         final ButtonGroup addInput = new ButtonGroup("+i", 16, 16, 32, 32);
         final ButtonGroup addOutput = new ButtonGroup("+o", getWidth() - 48, 16, 32, 32);
 
+        inputs.setDefault(LogicType.SWITCH, addInput.getX());
+        outputs.setDefault(LogicType.COPY, addOutput.getX());
+
+        inputs.reset();
+        outputs.reset();
+
         addInput.onClick(new ClickAction() {
             @Override
             public void onClick() {
-                SwitchActor input = inputs.add(LogicType.SWITCH, addInput.getX());
-                addActor(input);
+                inputs.add();
             }
         });
 
         addOutput.onClick(new ClickAction() {
             @Override
             public void onClick() {
-                SwitchActor output = outputs.add(LogicType.COPY, addOutput.getX());
-                addActor(output);
+                outputs.add();
             }
         });
 

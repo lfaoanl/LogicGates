@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import nl.faanveldhuijsen.logicgates.actors.groups.BaseGroup;
+import nl.faanveldhuijsen.logicgates.actors.groups.GateGroup;
 import nl.faanveldhuijsen.logicgates.figures.CircleFigure;
 import nl.faanveldhuijsen.logicgates.logics.*;
 
@@ -23,10 +24,9 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     private boolean on = false;
 
-    private ConnectionActor connection;
-    private SwitchActor[] sources = new SwitchActor[2];
+    private ConnectionActor connection_;
+    private SwitchActor[] sources;
 
-    private ConnectionActor tmpConnection;
 
     public SwitchActor(float x, float y, int size, LogicType type) {
         this(x, y, size, type, null);
@@ -107,9 +107,6 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        if (connection != null) {
-            System.out.println(connection.getPath());
-        }
         if (type != LogicType.SWITCH) {
             return false;
         }
@@ -132,28 +129,19 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     @Override
     public void dragStart(InputEvent event, float x, float y, int pointer) {
-        tmpConnection = new ConnectionActor(this);
-        tmpConnection.setColor(Color.LIGHT_GRAY);
-        getStage().addActor(tmpConnection);
+        ConnectionActor connection = new ConnectionActor(this);
+        setConnection(connection);
     }
 
     @Override
     public void drag(InputEvent event, float x, float y, int pointer) {
-        tmpConnection.paint(event.getStageX(), event.getStageY());
+        getConnection().paint(event.getStageX(), event.getStageY());
 
         if (type != LogicType.COPY) {
             SwitchActor target = findHoveredActor(event.getStageX(), event.getStageY(), getStage().getActors());
             if (target != null && target.type == LogicType.COPY) {
-                tmpConnection.snapTo(target.getPosition());
-//                ScaleToAction scale = new ScaleToAction();
-//                scale.setScale(1.5f);
-//                scale.setDuration(0.5f);
-//                target.addAction(scale);
-//                hoveredActor = target;
+                getConnection().snapTo(target.getPosition());
             }
-//            if (target == null && hoveredActor != null) {
-//                hoveredActor.setScale(1.0f);
-//            }
         }
     }
 
@@ -162,20 +150,16 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         if (type != LogicType.COPY) {
             SwitchActor target = findHoveredActor(event.getStageX(), event.getStageY(), getStage().getActors());
             if (target != null && target.type == LogicType.COPY) {
-                target.setSource(tmpConnection, this);
+                target.setSource(getConnection(), this);
             }
-            tmpConnection.remove();
-            tmpConnection = null;
+            removeConnection();
         }
-//        connection.remove();
-//        connection = null;
     }
 
     public static SwitchActor findHoveredActor(float x, float y, Array<Actor> actors) {
         for (Actor actor : actors) {
             if (actor instanceof BaseGroup) {
                 SwitchActor a = findHoveredActor(x - actor.getX(), y - actor.getY(), ((BaseGroup) actor).getChildren());
-                System.out.println(a);
                 if (a != null) {
                     return a;
                 }
@@ -203,22 +187,15 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
             }
             boolean groupInstance = getParent() instanceof BaseGroup;
             if (!groupInstance || getParent() != source.getParent()) {
-                if (connection != null) {
-                    connection.remove();
-                }
-                connection = new ConnectionActor(this, source);
+
+                removeConnection();
+
+                ConnectionActor connection = new ConnectionActor(this, source);
                 ConnectionPoints path = tmp.getPath();
                 path.reverse();
                 connection.setPath(path);
-                getStage().addActor(connection);
+                setConnection(connection);
             }
-        }
-    }
-
-    private void removeConnection() {
-        if (connection != null){
-            connection.remove();
-            connection = null;
         }
     }
 
@@ -236,6 +213,22 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         this.sources = new SwitchActor[2];
     }
 
+    private void setConnection(ConnectionActor connection) {
+        connection_ = connection;
+        getStage().addActor(connection);
+    }
+
+    private void removeConnection() {
+        if (connection_ != null){
+            connection_.remove();
+            connection_ = null;
+        }
+    }
+
+    private ConnectionActor getConnection() {
+        return connection_;
+    }
+
     @Override
     protected void positionChanged() {
         super.positionChanged();
@@ -243,5 +236,15 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
         if (sprite != null) {
             sprite.setPosition(getX(), getY());
         }
+    }
+
+    @Override
+    public boolean remove() {
+
+        return super.remove();
+    }
+
+    private boolean isFromGate() {
+        return hasParent() && getParent() instanceof GateGroup;
     }
 }
