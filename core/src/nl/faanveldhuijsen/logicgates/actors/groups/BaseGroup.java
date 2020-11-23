@@ -9,12 +9,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import nl.faanveldhuijsen.logicgates.logics.Clickable;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
 
-public abstract class BaseGroup extends Group implements Clickable {
+public abstract class BaseGroup extends Group {
 
     protected ClickListener clickListener;
 
     public BaseGroup() {
-        enableTouchDown();
+        if (this instanceof Clickable) {
+            enableTouchDown();
+        }
         if (this instanceof Draggable) {
             enableDraggable();
         }
@@ -63,7 +65,6 @@ public abstract class BaseGroup extends Group implements Clickable {
         super.positionChanged();
     }
 
-    @Override
     public ClickListener getClickListener() {
         return clickListener;
     }

@@ -10,13 +10,14 @@ import nl.faanveldhuijsen.logicgates.actors.GateActor;
 import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
 import nl.faanveldhuijsen.logicgates.actors.TextActor;
 import nl.faanveldhuijsen.logicgates.figures.GateFigure;
+import nl.faanveldhuijsen.logicgates.logics.Clickable;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
 import nl.faanveldhuijsen.logicgates.logics.LogicType;
 import nl.faanveldhuijsen.logicgates.logics.SwitchLogic;
 
 import java.util.ArrayList;
 
-public class GateGroup extends BaseGroup {
+public class GateGroup extends BaseGroup implements Clickable {
 
     protected final Color GATE_COLOR = new Color(0.5f, 1.0f, 0.5f, 1.0f);
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import nl.faanveldhuijsen.logicgates.actors.groups.ButtonCarouselGroup;
 import nl.faanveldhuijsen.logicgates.actors.groups.ButtonGroup;
 import nl.faanveldhuijsen.logicgates.figures.PixelFigure;
 import nl.faanveldhuijsen.logicgates.gates.AndGate;
@@ -23,6 +24,7 @@ public class BoardStage extends Stage {
 
     public final SwitchList inputs;
     public final SwitchList outputs;
+    public ButtonCarouselGroup buttonCarousel;
 
     public BoardStage() {
         super(new ExtendViewport(640, 420));
@@ -59,19 +61,7 @@ public class BoardStage extends Stage {
         addActor(addInput);
         addActor(addOutput);
 
-        final ButtonGroup addAndGate = new ButtonGroup("AND", 64, 16, 64, 32);
-        addAndGate.onAction(new AddGateAction(this, addAndGate, AndGate.class));
-        addActor(addAndGate);
-
-        final ButtonGroup addNotGate = new ButtonGroup("NOT", 144, 16, 64, 32);
-        addNotGate.onAction(new AddGateAction(this, addNotGate, NotGate.class));
-        addActor(addNotGate);
-
-
-
-        final ButtonGroup custom = new ButtonGroup("CSTM", 224, 16, 64, 32);
-        custom.onAction(new AddGateAction(this, custom, CustomGate.class, "gate_001"));
-        addActor(custom);
+        addActor(new ButtonCarouselGroup(this, 64, 16, getWidth(), 64));
     }
 
     @Override

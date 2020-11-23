@@ -94,6 +94,6 @@ public class CustomGate extends GateGroup {
 
     private GateData loadData(String gateId) {
         Json json = new Json();
-        return json.fromJson(GateData.class, Gdx.files.internal(gateId + ".json"));
+        return json.fromJson(GateData.class, Gdx.files.internal("data/gates/" + gateId + ".json"));
     }
 }

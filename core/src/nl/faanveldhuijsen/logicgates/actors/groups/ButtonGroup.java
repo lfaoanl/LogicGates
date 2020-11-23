@@ -8,9 +8,10 @@ import nl.faanveldhuijsen.logicgates.actors.BaseActor;
 import nl.faanveldhuijsen.logicgates.actors.TextActor;
 import nl.faanveldhuijsen.logicgates.figures.ButtonFigure;
 import nl.faanveldhuijsen.logicgates.logics.ButtonAction;
+import nl.faanveldhuijsen.logicgates.logics.Clickable;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
 
-public class ButtonGroup extends BaseGroup implements Draggable {
+public class ButtonGroup extends BaseGroup implements Draggable, Clickable {
 
 
     private ButtonAction action;
