@@ -89,7 +89,8 @@ public class ConnectionActor extends BaseActor {
     public void paint(float x, float y) {
         Vector2 point = new Vector2(x, y);
         if (path.isEmpty()) {
-            point.y = (Math.round(getStartPosition().y / 16) * 16) + getStartPosition().y % 16;
+//            point.y = (Math.round(getStartPosition().y / 16) * 16) + getStartPosition().y % 16;
+            point.y = getStartPosition().y;
             path.add(point);
             return;
         }

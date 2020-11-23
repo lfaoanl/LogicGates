@@ -30,7 +30,8 @@ public class TextActor extends BaseActor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        font.setColor(getColor());
+        setTransparency(batch, parentAlpha);
+        font.setColor(batch.getColor());
         font.draw(batch, text, getX() + offset.x, getY() + offset.y);
     }
 }

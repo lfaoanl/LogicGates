@@ -1,5 +1,6 @@
 package nl.faanveldhuijsen.logicgates.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -24,8 +25,15 @@ public class BaseActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        sprite.setColor(this.getColor());
+        setTransparency(batch, parentAlpha);
+
+        sprite.setColor(batch.getColor());
         sprite.draw(batch);
+    }
+
+    public void setTransparency(Batch batch, float parentAlpha) {
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
     }
 
     public Sprite getSprite() {

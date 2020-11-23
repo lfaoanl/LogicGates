@@ -25,11 +25,11 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
     private boolean on = false;
 
     private ConnectionActor connection_;
-    private SwitchActor[] sources;
+    private SwitchActor[] sources = new SwitchActor[2];
 
 
     public SwitchActor(float x, float y, int size, LogicType type) {
-        this(x, y, size, type, null);
+        this(x, y, size, type, (SwitchActor[]) null);
     }
 
     public SwitchActor(float x, float y, int size, LogicType type, SwitchActor... sources) {
@@ -246,5 +246,9 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
 
     private boolean isFromGate() {
         return hasParent() && getParent() instanceof GateGroup;
+    }
+
+    public SwitchActor[] getSources() {
+        return sources;
     }
 }

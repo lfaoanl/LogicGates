@@ -1,16 +1,20 @@
 package nl.faanveldhuijsen.logicgates.actors.groups;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import nl.faanveldhuijsen.logicgates.actors.BaseActor;
 import nl.faanveldhuijsen.logicgates.actors.TextActor;
 import nl.faanveldhuijsen.logicgates.figures.ButtonFigure;
-import nl.faanveldhuijsen.logicgates.logics.ClickAction;
+import nl.faanveldhuijsen.logicgates.logics.ButtonAction;
+import nl.faanveldhuijsen.logicgates.logics.Draggable;
 
-public class ButtonGroup extends BaseGroup {
+public class ButtonGroup extends BaseGroup implements Draggable {
 
 
-    private ClickAction clickAction;
+    private ButtonAction action;
+    public boolean disabled = false;
 
     public ButtonGroup(float x, float y, int width, int height) {
         super();
@@ -36,6 +40,15 @@ public class ButtonGroup extends BaseGroup {
 //        // TODO add button possibility
 //    }
 
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if (disabled) {
+            parentAlpha = 0.5f;
+        }
+        super.draw(batch, parentAlpha);
+    }
+
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         return true;
@@ -43,12 +56,33 @@ public class ButtonGroup extends BaseGroup {
 
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        if (clickAction != null) {
-            clickAction.onClick();
+        if (action != null) {
+            action.onClick();
         }
     }
 
-    public void onClick(ClickAction clickAction) {
-        this.clickAction = clickAction;
+    public void onAction(ButtonAction action) {
+        this.action = action;
+    }
+
+    @Override
+    public void dragStart(InputEvent event, float x, float y, int pointer) {
+        if (action != null) {
+            action.dragStart();
+        }
+    }
+
+    @Override
+    public void drag(InputEvent event, float x, float y, int pointer) {
+        if (action != null) {
+            action.drag(event);
+        }
+    }
+
+    @Override
+    public void dragStop(InputEvent event, float x, float y, int pointer, DragListener self) {
+        if (action != null) {
+            action.dragStop();
+        }
     }
 }

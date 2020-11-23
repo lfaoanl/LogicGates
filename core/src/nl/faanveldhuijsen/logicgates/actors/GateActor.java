@@ -21,13 +21,16 @@ public class GateActor extends BaseActor implements Draggable {
     @Override
     public void dragStart(InputEvent event, float x, float y, int pointer) {
         GateGroup parent = (GateGroup) getParent();
+        parent.setZIndex(1000);
         parent.setScale(1.1f);
+
         startDrag = new Vector2(parent.getX() - event.getStageX(), parent.getY() - event.getStageY());
 
         for (SwitchActor input : parent.getInputs()) {
-            // TODO fix the connections when moving 
+            // TODO fix the connections when moving
             input.clearConnections();
         }
+
     }
 
     @Override
@@ -40,14 +43,13 @@ public class GateActor extends BaseActor implements Draggable {
 
     @Override
     public void dragStop(InputEvent event, float x, float y, int pointer, DragListener self) {
-        getParent().setScale(1.0f);
+        GateGroup parent = (GateGroup) getParent();
+        parent.setScale(1.0f);
 
-        float xPos = getParent().getX() + x + startDrag.x;
-        float yPos = getParent().getY() + y + startDrag.y;
-        int gridSize = 16;
-        xPos = Math.round(xPos / gridSize) * gridSize;
-        yPos = Math.round(yPos / gridSize) * gridSize;
+        float xPos = parent.getX() + x + startDrag.x;
+        float yPos = parent.getY() + y + startDrag.y;
 
-        getParent().setPosition(xPos, yPos);
+        parent.setGridPosition(xPos, yPos);
+        parent.setZIndex(1);
     }
 }

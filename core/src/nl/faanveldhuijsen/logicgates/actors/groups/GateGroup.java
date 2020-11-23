@@ -29,7 +29,7 @@ public class GateGroup extends BaseGroup {
 
     private Vector2 startDrag;
 
-    public GateGroup(int x, int y, String text, int amountInputs, int amountOutputs) {
+    public GateGroup(float x, float y, String text, int amountInputs, int amountOutputs) {
         super();
 
         setWidth(96);
@@ -91,6 +91,10 @@ public class GateGroup extends BaseGroup {
         return inputs;
     }
 
+    public ArrayList<SwitchActor> getOutputs() {
+        return outputs;
+    }
+
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         return false;
@@ -99,5 +103,12 @@ public class GateGroup extends BaseGroup {
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
+    }
+
+    public void setGridPosition(float xPos, float yPos) {
+        int gridSize = 16;
+        xPos = Math.round(xPos / gridSize) * gridSize;
+        yPos = Math.round(yPos / gridSize) * gridSize;
+        setPosition(xPos, yPos);
     }
 }

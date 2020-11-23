@@ -1,21 +1,17 @@
 package nl.faanveldhuijsen.logicgates.stages;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import nl.faanveldhuijsen.logicgates.actors.AndGate;
-import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
 import nl.faanveldhuijsen.logicgates.actors.groups.ButtonGroup;
 import nl.faanveldhuijsen.logicgates.figures.PixelFigure;
-import nl.faanveldhuijsen.logicgates.logics.ClickAction;
+import nl.faanveldhuijsen.logicgates.logics.AddGateAction;
+import nl.faanveldhuijsen.logicgates.logics.ButtonAction;
 import nl.faanveldhuijsen.logicgates.logics.LogicType;
 import nl.faanveldhuijsen.logicgates.logics.SwitchList;
 import space.earlygrey.shapedrawer.ShapeDrawer;
-
-import java.util.ArrayList;
 
 public class BoardStage extends Stage {
 
@@ -33,26 +29,24 @@ public class BoardStage extends Stage {
     }
 
     public void init() {
-        AndGate andGate = new AndGate((int) (getWidth() / 2) - 48, (int) (getHeight() / 2) - 48);
-        addActor(andGate);
-
         final ButtonGroup addInput = new ButtonGroup("+i", 16, 16, 32, 32);
         final ButtonGroup addOutput = new ButtonGroup("+o", getWidth() - 48, 16, 32, 32);
 
-        inputs.setDefault(LogicType.SWITCH, addInput.getX());
-        outputs.setDefault(LogicType.COPY, addOutput.getX());
+        inputs.setDefault(addInput, LogicType.SWITCH, addInput.getX());
+        outputs.setDefault(addOutput, LogicType.COPY, addOutput.getX());
 
         inputs.reset();
         outputs.reset();
 
-        addInput.onClick(new ClickAction() {
+        addInput.onAction(new ButtonAction() {
             @Override
             public void onClick() {
+//                ((OrthographicCamera) getCamera()).zoom += 0.02f;
                 inputs.add();
             }
         });
 
-        addOutput.onClick(new ClickAction() {
+        addOutput.onAction(new ButtonAction() {
             @Override
             public void onClick() {
                 outputs.add();
@@ -61,6 +55,11 @@ public class BoardStage extends Stage {
 
         addActor(addInput);
         addActor(addOutput);
+
+        final ButtonGroup addAndGate = new ButtonGroup("AND", 64, 16, 64, 32);
+
+        addAndGate.onAction(new AddGateAction(this, addAndGate));
+        addActor(addAndGate);
     }
 
     @Override

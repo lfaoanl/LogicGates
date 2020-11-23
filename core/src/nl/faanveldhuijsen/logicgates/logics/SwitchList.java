@@ -1,8 +1,10 @@
 package nl.faanveldhuijsen.logicgates.logics;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
+import nl.faanveldhuijsen.logicgates.actors.groups.ButtonGroup;
 import nl.faanveldhuijsen.logicgates.stages.BoardStage;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class SwitchList {
     private final int maximum;
     private final Stage stage;
 
+    private ButtonGroup button;
     private LogicType type;
     private float x;
 
@@ -30,36 +33,62 @@ public class SwitchList {
     }
 
     public void add(boolean animation) {
-        this.add(stage, type, x, animation);
+        this.add(stage, type, animation);
     }
 
-    public void add(Stage stage, LogicType type, float x, boolean animation) {
-        if (switches.size() >= maximum) {
+    public void add(Stage stage, LogicType type, boolean animation) {
+        if (full()) {
             return;
         }
-        float steps = height / (switches.size() + 2);
         for (int i = 0; i < switches.size(); i++) {
             SwitchActor actor = switches.get(i);
-            float y = steps * (i + 1);
+            float y = getY(i);
 
             if (animation) {
-                MoveToAction moveTo = new MoveToAction();
-                moveTo.setX(actor.getX());
-                moveTo.setY(y);
-                moveTo.setDuration(0.1f);
+                MoveToAction moveTo = getMoveToAction(actor, y);
                 actor.addAction(moveTo);
             } else {
                 actor.setY(y);
             }
         }
-        SwitchActor newActor = new SwitchActor(x, steps * (switches.size() + 1), 10, type);
+
+        float y = animation ? button.getY() : getY(switches.size());
+        SwitchActor newActor = new SwitchActor(button.getX(), y, 10, type);
+        if (animation) {
+
+            MoveToAction moveTo = getMoveToAction(button, getY(switches.size()));
+            newActor.addAction(moveTo);
+        }
+
         switches.add(newActor);
         stage.addActor(newActor);
+
+        button.disabled = full();
     }
 
-    public void setDefault(LogicType aSwitch, float x) {
+    public MoveToAction getMoveToAction(Actor actor, float y) {
+        MoveToAction moveTo = new MoveToAction();
+        moveTo.setX(actor.getX());
+        moveTo.setY(y);
+        moveTo.setDuration(0.1f);
+        return moveTo;
+    }
+
+    public float getY(int i) {
+        // Step size is equal to the height / by amount of switches + the new switch + 1
+        float steps = height / (switches.size() + 2);
+        return height - (steps * (i + 1));
+    }
+
+    public boolean full() {
+        return switches.size() >= maximum;
+    }
+
+    public void setDefault(ButtonGroup button, LogicType aSwitch, float x) {
         this.type = aSwitch;
         this.x = x;
+        this.button = button;
+
     }
 
     public void reset() {

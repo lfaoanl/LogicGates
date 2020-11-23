@@ -1,8 +1,8 @@
 package nl.faanveldhuijsen.logicgates.logics;
 
+import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
+
 public interface GateLogic {
 
-    boolean getOutput(int outputIndex);
 
-    void addSource(int inputIndex, SwitchLogic source);
 }
