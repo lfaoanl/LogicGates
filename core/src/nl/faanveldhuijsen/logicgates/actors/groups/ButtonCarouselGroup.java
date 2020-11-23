@@ -52,6 +52,11 @@ public class ButtonCarouselGroup extends BaseGroup {
 
     public void updateButtonData() {
         FileHandle file = Gdx.files.local("data/gate_buttons.json");
+
+        if (!file.exists()) {
+            file.writeString("{}", false);
+        }
+
         Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
         String jsonText = json.toJson(parseButtonData());
@@ -61,6 +66,11 @@ public class ButtonCarouselGroup extends BaseGroup {
     private ButtonData getButtonsData() {
         Json json = new Json();
         FileHandle buttonData = Gdx.files.local("data/gate_buttons.json");
+
+        if (!buttonData.exists()) {
+            return new ButtonData();
+        }
+
         return json.fromJson(ButtonData.class, buttonData);
     }
 

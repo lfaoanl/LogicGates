@@ -19,7 +19,7 @@ public class TextActor extends BaseActor {
         setColor(color);
     }
 
-    private void setText(String text) {
+    public void setText(String text) {
         GlyphLayout layout = new GlyphLayout(font, text);
         float width = layout.width;
         float height = layout.height;
@@ -33,5 +33,9 @@ public class TextActor extends BaseActor {
         setTransparency(batch, parentAlpha);
         font.setColor(batch.getColor());
         font.draw(batch, text, getX() + offset.x, getY() + offset.y);
+    }
+
+    public String getText() {
+        return text;
     }
 }
