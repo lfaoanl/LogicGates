@@ -23,7 +23,7 @@ public abstract class TextInput extends BaseGroup implements InputProcessor {
         setSize(width, height);
         setPosition(x - (width / 2), y - (height / 2));
 
-        ButtonFigure figure = new ButtonFigure((int) getWidth(), (int) getHeight());
+        ButtonFigure figure = new ButtonFigure((int) getWidth(), (int) getHeight(), 8);
         BaseActor main = new BaseActor(0, 0);
         main.setSprite(figure.getTexture(), figure.getWidth(), figure.getHeight());
 

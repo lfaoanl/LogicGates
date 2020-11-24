@@ -3,9 +3,14 @@ package nl.faanveldhuijsen.logicgates.actors.groups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.ColorAction;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import nl.faanveldhuijsen.logicgates.actors.BaseActor;
+import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
 import nl.faanveldhuijsen.logicgates.gates.AndGate;
 import nl.faanveldhuijsen.logicgates.gates.CustomGate;
 import nl.faanveldhuijsen.logicgates.gates.NotGate;
@@ -16,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ButtonCarouselGroup extends BaseGroup {
+
+    private DeleteFieldGroup deletionField;
 
     private static class ButtonData extends HashMap<String, String> {}
 
@@ -84,5 +91,24 @@ public class ButtonCarouselGroup extends BaseGroup {
 
     public int nextId() {
         return buttons.size();
+    }
+
+    public boolean withinBounds(float x, float y) {
+        return y < getHeight();
+    }
+
+    public void gateEnter() {
+        if (deletionField == null) {
+            deletionField = new DeleteFieldGroup("delete", 0, 0, (int) getStage().getWidth(), (int) getHeight());
+            getStage().addActor(deletionField);
+            deletionField.fadeIn();
+        }
+    }
+
+    public void gateLeave() {
+        if (deletionField != null) {
+            deletionField.fadeOut();
+            deletionField = null;
+        }
     }
 }

@@ -5,8 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import nl.faanveldhuijsen.logicgates.actors.groups.ButtonCarouselGroup;
 import nl.faanveldhuijsen.logicgates.actors.groups.GateGroup;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
+import nl.faanveldhuijsen.logicgates.stages.BoardStage;
 
 public class GateActor extends BaseActor implements Draggable {
 
@@ -39,16 +41,33 @@ public class GateActor extends BaseActor implements Draggable {
         float x1 = parent.getX() + x + startDrag.x;
         float y1 = parent.getY() + y + startDrag.y;
         parent.setPosition(x1, y1);
+
+        ButtonCarouselGroup buttons = ((BoardStage) getStage()).buttons;
+        boolean withinBounds = buttons.withinBounds(x1, y1);
+
+        if (withinBounds) {
+            buttons.gateEnter();
+        } else {
+            buttons.gateLeave();
+        }
     }
 
     @Override
     public void dragStop(InputEvent event, float x, float y, int pointer, DragListener self) {
         GateGroup parent = (GateGroup) getParent();
+
+
         parent.setScale(1.0f);
 
         float xPos = parent.getX() + x + startDrag.x;
         float yPos = parent.getY() + y + startDrag.y;
 
+        ButtonCarouselGroup buttons = ((BoardStage) getStage()).buttons;
+        if (buttons.withinBounds(xPos, yPos)) {
+            parent.remove();
+            buttons.gateLeave();
+            return;
+        }
         parent.setGridPosition(xPos, yPos);
         parent.setZIndex(1);
     }
