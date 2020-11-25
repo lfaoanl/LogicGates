@@ -8,4 +8,5 @@ public class SwitchData {
     public String id;
     public LogicType logicType;
     public ArrayList<String> sources;
+    public String gate;
 }

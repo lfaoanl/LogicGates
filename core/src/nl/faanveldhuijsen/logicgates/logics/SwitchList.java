@@ -103,6 +103,7 @@ public class SwitchList {
     }
 
     public void remove(SwitchActor actor) {
+        // TODO HashMap size does not decrease, convert to Array<String[2]>
         switches.remove(actor);
         actor.remove();
     }

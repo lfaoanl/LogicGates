@@ -6,18 +6,20 @@ import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
 import nl.faanveldhuijsen.logicgates.actors.groups.GateGroup;
 import nl.faanveldhuijsen.logicgates.data.GateData;
 import nl.faanveldhuijsen.logicgates.data.SwitchData;
+import nl.faanveldhuijsen.logicgates.logics.LogicType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CustomGate extends GateGroup {
 
-    HashMap<String, SwitchActor> customInputs = new HashMap<>();
-    HashMap<String, SwitchActor> customOutputs = new HashMap<>();
     HashMap<String, SwitchActor> customSwitches = new HashMap<>();
+    HashMap<String, CustomGate> customGates = new HashMap<>();
 
     public CustomGate(float x, float y, String gateId) {
         super(x, y);
+
+        setName(gateId);
 
         GateData data = loadData(gateId);
 
@@ -29,37 +31,50 @@ public class CustomGate extends GateGroup {
 
         createTitle(data.title);
 
-        addInputs(data.inputs);
         addSwitches(data.switches);
-        addOutputs(data.outputs);
 
         connectSwitches(data.switches);
     }
 
-    protected void addInputs(ArrayList<SwitchData> data) {
-        for (SwitchData switchData : data) {
-            customInputs.put(switchData.id, addInput());
-        }
-    }
-
     protected void addSwitches(ArrayList<SwitchData> data) {
         for (SwitchData switchData : data) {
+            if (switchData.id.contains("custom")) {
+                customGates.put(switchData.id, new CustomGate(0, 0, switchData.gate));
+                continue;
+            }
+            if (switchData.id.contains("input")) {
+                customSwitches.put(switchData.id, addInput());
+                continue;
+            }
+
+            if (switchData.id.contains("output")) {
+                customSwitches.put(switchData.id, addOutput(switchData.logicType));
+                continue;
+            }
+
             customSwitches.put(switchData.id, new SwitchActor(switchData.logicType));
-        }
-    }
-
-    protected void addOutputs(ArrayList<SwitchData> outputs) {
-        for (SwitchData switchData : outputs) {
-
-            SwitchActor[] sources = parseSources(switchData);
-
-            SwitchActor output = addOutput(switchData.logicType, sources);
-            customOutputs.put(switchData.id, output);
         }
     }
 
     private void connectSwitches(ArrayList<SwitchData> switches) {
         for (SwitchData switchData : switches) {
+            if (switchData.id.contains("custom")) {
+                CustomGate gate = customGates.get(switchData.id);
+
+                ArrayList<SwitchActor> inputs = gate.getInputs();
+                for (int i = 0; i < inputs.size(); i++) {
+                    SwitchActor gateInput = inputs.get(i);
+                    gateInput.setSource(customSwitches.get(switchData.sources.get(i)));
+                }
+                continue;
+            }
+
+            // Inputs don't have sources, so skip
+            if (switchData.id.contains("input")) {
+                continue;
+            }
+
+            // Parses sources for outputs and others
             SwitchActor switchActor = customSwitches.get(switchData.id);
             switchActor.setSource(parseSources(switchData));
         }
@@ -71,11 +86,11 @@ public class CustomGate extends GateGroup {
         for (int i = 0; i < switchData.sources.size(); i++) {
             String src = switchData.sources.get(i);
 
-            if (src.startsWith("input")) {
-                sources[i] = customInputs.get(src);
-            } else {
-                sources[i] = customSwitches.get(src);
+            if (src.contains("custom")) {
+                sources[i] = customGates.get(src).getOutputs().get(0);
+                continue;
             }
+            sources[i] = customSwitches.get(src);
         }
         return sources;
     }

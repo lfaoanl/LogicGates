@@ -10,6 +10,7 @@ import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
 import nl.faanveldhuijsen.logicgates.actors.groups.ButtonCarouselGroup;
 import nl.faanveldhuijsen.logicgates.data.GateData;
 import nl.faanveldhuijsen.logicgates.data.SwitchData;
+import nl.faanveldhuijsen.logicgates.gates.CustomGate;
 import nl.faanveldhuijsen.logicgates.logics.LogicType;
 import nl.faanveldhuijsen.logicgates.logics.SwitchList;
 import nl.faanveldhuijsen.logicgates.logics.TextInput;
@@ -22,9 +23,8 @@ public class CreateGateAction extends ButtonAction {
 
     private final BoardStage stage;
 
-    ArrayList<SwitchData> dataInputs = new ArrayList<>();
     ArrayList<SwitchData> dataSwitches = new ArrayList<>();
-    ArrayList<SwitchData> dataOutputs = new ArrayList<>();
+    ArrayList<SwitchActor> processed = new ArrayList<>();
 
     public CreateGateAction(BoardStage stage) {
         this.stage = stage;
@@ -58,6 +58,8 @@ public class CreateGateAction extends ButtonAction {
         stage.buttons.updateButtonData();
 
         stage.reset();
+        dataSwitches = new ArrayList<>();
+        processed = new ArrayList<>();
     }
 
     private GateData getGateData(String title) {
@@ -66,13 +68,21 @@ public class CreateGateAction extends ButtonAction {
         gateData.title = title;
 
         gateData.switchCount = new HashMap<>();
-        gateData.switchCount.put("input", dataInputs.size());
-        gateData.switchCount.put("output", dataOutputs.size());
+        gateData.switchCount.put("input", count("input"));
+        gateData.switchCount.put("output", count("output"));
 
-        gateData.inputs = dataInputs;
         gateData.switches = dataSwitches;
-        gateData.outputs = dataOutputs;
         return gateData;
+    }
+
+    private int count(String what) {
+        int count = 0;
+        for (SwitchData data : dataSwitches) {
+            if (data.id.contains(what)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private void writeJson(GateData gateData, String gateId) {
@@ -88,29 +98,50 @@ public class CreateGateAction extends ButtonAction {
         switchData.logicType = actor.type;
 
         SwitchActor[] sources = actor.getSources();
-        if (stage.inputs.getSwitches().contains(actor)) {
-            switchData.id = "input_" + dataInputs.size();
-            dataInputs.add(switchData);
+
+        if (actor.isFromGate() && actor.getParent() instanceof CustomGate) {
+            CustomGate gate = (CustomGate) actor.getParent();
+            switchData.sources = new ArrayList<>();
+
+            switchData.id = "custom_" + dataSwitches.size();
+            switchData.gate = gate.getName();
+
+            for (SwitchActor gateInput : gate.getInputs()) {
+                parseSource(switchData, gateInput);
+            }
+        } else if (stage.inputs.getSwitches().contains(actor)) {
+            switchData.id = "input_" + dataSwitches.size();
         } else if (sources != null) {
             switchData.sources = new ArrayList<>();
 
             // TODO cant loop through other custom gates
             for (SwitchActor switchActor : sources) {
-                SwitchActor concurrentActor = switchActor.type == LogicType.COPY ? switchActor.getSources()[0] : switchActor;
-                SwitchData concurrent = getSwitchData(concurrentActor, false);
-                switchData.sources.add(concurrent.id);
+                parseSource(switchData, switchActor);
             }
 
             if (isOutput) {
-                switchData.id = "output_" + dataOutputs.size();
+                switchData.id = "output_" + dataSwitches.size();
                 switchData.logicType = LogicType.OUTPUT;
-                dataOutputs.add(switchData);
             } else {
                 switchData.id = "switch_" + dataSwitches.size();
-                dataSwitches.add(switchData);
             }
         }
 
+
+        dataSwitches.add(switchData);
         return switchData;
+    }
+
+    private void parseSource(SwitchData switchData, SwitchActor switchActor) {
+        SwitchActor concurrentActor = switchActor.type == LogicType.COPY ? switchActor.getSources()[0] : switchActor;
+        if (processed.contains(concurrentActor)) {
+            switchData.sources.add(concurrentActor.getName());
+            return;
+        }
+
+        processed.add(concurrentActor);
+        SwitchData concurrent = getSwitchData(concurrentActor, false);
+        concurrentActor.setName(concurrent.id);
+        switchData.sources.add(concurrent.id);
     }
 }
