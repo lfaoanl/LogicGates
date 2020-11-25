@@ -34,7 +34,7 @@ public class BoardStage extends Stage {
         pixel = new PixelFigure();
         inputs = new SwitchList(this, 2, 5, getHeight());
         outputs = new SwitchList(this, 1, 5, getHeight());
-        buttons = new ButtonCarouselGroup(this, 64, 16, getWidth(), 64);
+        buttons = new ButtonCarouselGroup(this, 64, 16, getWidth() - 128, 64);
     }
 
     public void init() {

@@ -15,15 +15,18 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import nl.faanveldhuijsen.logicgates.LogicGates;
+import nl.faanveldhuijsen.logicgates.actions.ButtonAction;
 import nl.faanveldhuijsen.logicgates.actors.BaseActor;
 import nl.faanveldhuijsen.logicgates.actors.TextActor;
 import nl.faanveldhuijsen.logicgates.actors.groups.BaseGroup;
+import nl.faanveldhuijsen.logicgates.actors.groups.ButtonGroup;
 import nl.faanveldhuijsen.logicgates.figures.ButtonFigure;
 
 public abstract class TextInput extends BaseGroup implements InputProcessor {
 
     protected final TextActor textActor;
     private final RepeatAction caretBlink;
+    private final ButtonGroup close;
     protected BaseActor caretActor;
     private boolean opened = false;
 
@@ -54,6 +57,9 @@ public abstract class TextInput extends BaseGroup implements InputProcessor {
                 Actions.delay(0.4f, Actions.fadeIn(0.1f))
         ));
         caretActor.addAction(caretBlink);
+
+        close = new ButtonGroup("X", getWidth() - 24, getHeight() - 24, 16, 16);
+        addActor(close);
     }
 
     @Override
@@ -100,6 +106,12 @@ public abstract class TextInput extends BaseGroup implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 coords = getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
+        if (close.withinBounds(coords.x - getX(), coords.y - getY())) {
+            close();
+            remove();
+            return true;
+        }
+
         if (withinBounds(coords.x, coords.y)) {
             open();
         } else {
@@ -155,4 +167,10 @@ public abstract class TextInput extends BaseGroup implements InputProcessor {
     }
 
     protected abstract void output(String text);
+
+    @Override
+    public boolean remove() {
+        Gdx.input.setInputProcessor(getStage());
+        return super.remove();
+    }
 }

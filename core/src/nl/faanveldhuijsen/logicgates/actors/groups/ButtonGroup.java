@@ -14,6 +14,7 @@ import nl.faanveldhuijsen.logicgates.logics.Draggable;
 public class ButtonGroup extends BaseGroup implements Draggable, Clickable {
 
 
+    public final BaseActor main;
     private String title;
     private ButtonAction action;
     public boolean disabled = false;
@@ -25,7 +26,7 @@ public class ButtonGroup extends BaseGroup implements Draggable, Clickable {
         setPosition(x, y);
 
         ButtonFigure figure = new ButtonFigure((int) getWidth(), (int) getHeight(), 8);
-        BaseActor main = new BaseActor(0, 0);
+        main = new BaseActor(0, 0);
         main.setSprite(figure.getTexture(), figure.getWidth(), figure.getHeight());
 
         addActor(main);
@@ -94,4 +95,6 @@ public class ButtonGroup extends BaseGroup implements Draggable, Clickable {
     public String getTitle() {
         return title;
     }
+
+
 }
