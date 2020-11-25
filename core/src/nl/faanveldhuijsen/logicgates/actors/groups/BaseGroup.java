@@ -1,5 +1,6 @@
 package nl.faanveldhuijsen.logicgates.actors.groups;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import nl.faanveldhuijsen.logicgates.logics.Clickable;
 import nl.faanveldhuijsen.logicgates.logics.Draggable;
+
+import java.util.Vector;
 
 public abstract class BaseGroup extends Group {
 
@@ -69,4 +72,12 @@ public abstract class BaseGroup extends Group {
         return clickListener;
     }
 
+    public boolean withinBounds(float x, float y) {
+        if (x > getX() && x < getX() + getWidth()) {
+            if (y > getY() && y < getY() + getHeight()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

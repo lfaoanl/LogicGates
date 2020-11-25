@@ -10,6 +10,8 @@ public class LogicGates extends ApplicationAdapter {
 
     BoardStage stage;
 
+    public static boolean desktop = false;
+
     @Override
     public void create() {
         stage = new BoardStage();

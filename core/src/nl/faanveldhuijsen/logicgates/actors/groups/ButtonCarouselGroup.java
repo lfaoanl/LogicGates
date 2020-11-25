@@ -93,6 +93,7 @@ public class ButtonCarouselGroup extends BaseGroup {
         return buttons.size();
     }
 
+    @Override
     public boolean withinBounds(float x, float y) {
         return y < getHeight();
     }

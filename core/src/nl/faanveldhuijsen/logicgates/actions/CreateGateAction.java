@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import nl.faanveldhuijsen.logicgates.LogicGates;
 import nl.faanveldhuijsen.logicgates.actors.BaseActor;
 import nl.faanveldhuijsen.logicgates.actors.SwitchActor;
 import nl.faanveldhuijsen.logicgates.actors.groups.ButtonCarouselGroup;
@@ -34,6 +35,8 @@ public class CreateGateAction extends ButtonAction {
     public void onClick() {
 
         TextInput getTitle = new TextInput(stage.getWidth() / 2, stage.getHeight() / 2, 256, 64) {
+
+
             @Override
             protected void output(String text) {
                 Gdx.input.setInputProcessor(getStage());
@@ -43,6 +46,10 @@ public class CreateGateAction extends ButtonAction {
         };
         stage.addActor(getTitle);
         Gdx.input.setInputProcessor(getTitle);
+
+        if (!LogicGates.desktop) {
+            getTitle.open();
+        }
     }
 
     private void create(String title) {

@@ -97,9 +97,19 @@ public class BaseActor extends Actor {
         return clickListener;
     }
 
+    @Override
+    protected void positionChanged() {
+        super.positionChanged();
+
+        if (sprite != null) {
+            sprite.setPosition(getX(), getY());
+        }
+    }
+
     /**
      * Returns center position of actor
      * @return Vector2
      */
 //    public abstract Vector2 getPosition();
+
 }

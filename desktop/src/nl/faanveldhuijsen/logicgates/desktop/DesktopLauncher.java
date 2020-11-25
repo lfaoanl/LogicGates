@@ -7,6 +7,9 @@ import nl.faanveldhuijsen.logicgates.LogicGates;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new LogicGates(), config);
+		LogicGates listener = new LogicGates();
+
+		listener.desktop = true;
+		new LwjglApplication(listener, config);
 	}
 }

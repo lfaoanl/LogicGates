@@ -242,15 +242,6 @@ public class SwitchActor extends BaseActor implements SwitchLogic, Clickable, Dr
     }
 
     @Override
-    protected void positionChanged() {
-        super.positionChanged();
-
-        if (sprite != null) {
-            sprite.setPosition(getX(), getY());
-        }
-    }
-
-    @Override
     public boolean remove() {
 
         return super.remove();

@@ -4,11 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
+import nl.faanveldhuijsen.logicgates.LogicGates;
 import nl.faanveldhuijsen.logicgates.actors.BaseActor;
 import nl.faanveldhuijsen.logicgates.actors.TextActor;
 import nl.faanveldhuijsen.logicgates.actors.groups.BaseGroup;
@@ -17,6 +23,8 @@ import nl.faanveldhuijsen.logicgates.figures.ButtonFigure;
 public abstract class TextInput extends BaseGroup implements InputProcessor {
 
     protected final TextActor textActor;
+    private final RepeatAction caretBlink;
+    protected BaseActor caretActor;
     private boolean opened = false;
 
     public TextInput(float x, float y, float width, float height) {
@@ -29,8 +37,23 @@ public abstract class TextInput extends BaseGroup implements InputProcessor {
 
         addActor(main);
 
-        textActor = new TextActor("", Color.BLACK, getWidth() / 2, getHeight() / 2);
+        textActor = new TextActor("", Color.BLACK, 16, getHeight() / 2);
+        textActor.centered = false;
         addActor(textActor);
+
+        Pixmap caret = new Pixmap(4, 32, Pixmap.Format.RGBA8888);
+        caret.setColor(Color.BLACK);
+        caret.fill();
+
+        caretActor = new BaseActor(18, (getHeight() / 2) - 16);
+        caretActor.setSprite(new Texture(caret), caret.getWidth(), caret.getHeight());
+        addActor(caretActor);
+
+        caretBlink = Actions.forever(Actions.sequence(
+                Actions.delay(0.4f, Actions.fadeOut(0.1f)),
+                Actions.delay(0.4f, Actions.fadeIn(0.1f))
+        ));
+        caretActor.addAction(caretBlink);
     }
 
     @Override
@@ -42,9 +65,12 @@ public abstract class TextInput extends BaseGroup implements InputProcessor {
     public boolean keyDown(int keycode) {
         TextActor textActor = TextInput.this.textActor;
         String text = textActor.getText();
+
         if (text.length() >= 1) {
             if (keycode == Input.Keys.BACKSPACE) {
                 textActor.setText(text.substring(0, text.length() - 1));
+
+                caretActor.setX(textActor.getX() + textActor.textWidth + 2);
                 return true;
             }
             if (keycode == Input.Keys.ENTER) {
@@ -54,6 +80,8 @@ public abstract class TextInput extends BaseGroup implements InputProcessor {
         }
         if (keycode >= 29 && keycode <= 54) {
             textActor.setText(text + Input.Keys.toString(keycode));
+
+            caretActor.setX(textActor.getX() + textActor.textWidth + 2);
             return true;
         }
         return false;
@@ -71,30 +99,33 @@ public abstract class TextInput extends BaseGroup implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (opened) {
-            close();
-        } else {
+        Vector2 coords = getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
+        if (withinBounds(coords.x, coords.y)) {
             open();
+        } else {
+            close();
         }
         return true;
     }
 
     public void open() {
-        if (opened) {
+        if (opened || LogicGates.desktop) {
             return;
         }
+
         Gdx.input.setOnscreenKeyboardVisible(true);
         MoveByAction move = new MoveByAction();
         move.setAmountY(getStage().getHeight() / 4);
-        move.setDuration(0.2f);
+        move.setDuration(0.1f);
         addAction(move);
         opened = true;
     }
 
     public void close() {
-        if (!opened) {
+        if (!opened || LogicGates.desktop) {
             return;
         }
+
         Gdx.input.setOnscreenKeyboardVisible(false);
         MoveByAction move = new MoveByAction();
         move.setAmountY(-(getStage().getHeight() / 4));

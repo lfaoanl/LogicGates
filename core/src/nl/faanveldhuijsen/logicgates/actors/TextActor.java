@@ -11,7 +11,11 @@ public class TextActor extends BaseActor {
 
     private String text;
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/Pixeled.fnt"));
-    private Vector2 offset;
+    private Vector2 offset = new Vector2();
+
+    public boolean centered = true;
+    public float textWidth;
+    public float textHeight;
 
     public TextActor(String text, Color color, float x, float y) {
         super(x, y);
@@ -21,10 +25,12 @@ public class TextActor extends BaseActor {
 
     public void setText(String text) {
         GlyphLayout layout = new GlyphLayout(font, text);
-        float width = layout.width;
-        float height = layout.height;
+        textWidth = layout.width;
+        textHeight = layout.height;
 
-        this.offset = new Vector2(-(width / 2), height / 2);
+        if (centered) {
+            this.offset = new Vector2(-(textWidth / 2), textHeight / 2);
+        }
         this.text = text;
     }
 
